@@ -10,24 +10,67 @@
 				padding: 0;
 			}
 
-			#tex {
+			#board {
 				position: absolute;
-				top: 0;
+			}
+			#gui {
+				position: absolute;
+				top: 20px;
+				left: 50%;
+			}
+			#gui ul {
+				display: inline;
+				margin-left: 0;
+				padding-left: 0;
+			}
+			#gui li {
+				background-image: url(resources/gui.png);
+				width: 24px;
+				height: 24px;
+				list-style: none;
+				display: inline-block;
+				margin-left: -3px;
+				padding: 0;
+			}
+
+			#gui li.selected {
+				background-position: 0 -24px;
+				
+			}
+
+			#minimap {
+				position: absolute;
 				left: 0;
-				width: 200px;
+				top: 0;
+			}
+			#minimap #tex {
+				width: 100px !important;
 			}
 		</style>
 	</head>
 	<body>
+		<div id="board">
+			<div id="game"></div>
+			<div id="gui">
+				<ul>
+					<li data-tool="search" class="selected"></li>
+					<li data-tool="mine"></li>
+					<li data-tool="recall"></li>
+				</ul>
+			</div>
+			<div id="minimap"></div>
+		</div>
 		<script src="vendor/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="vendor/base.js" type="text/javascript" charset="utf-8"></script>
 		<script src="vendor/three.js" type="text/javascript" charset="utf-8"></script>
 		<script src="vendor/noise.js" type="text/javascript" charset="utf-8"></script>
+		<script src="vendor/retinaDrawImage.js" type="text/javascript" charset="utf-8"></script>
 		
 		<script src="scripts/input.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/gfx.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/entities/Entity.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/planets/Planet.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/level.js" type="text/javascript" charset="utf-8"></script>
 		
 		<script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">

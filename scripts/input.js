@@ -26,6 +26,7 @@ var input = {
 		});
 	},
 	onClick: function(e){
+
 		if(main.planet.spinning) {
 			return;
 		}

@@ -16,18 +16,21 @@ var Planet = Class.extend({
 	entities: [],
 
 	init: function() {
-		var self = this;
-		this.populate();
-		
 		this.createCanvas();
-		this.renderTexture(function(tex){
-			self.worldMesh.add(self.createPlanet(tex));
-		});
 
 		this.reset();
 	},
 
 	reset: function() {
+
+		var self = this;
+		this.populate();
+		
+
+		this.renderTexture(function(tex){
+			self.worldMesh.add(self.createPlanet(tex));
+		});
+
 		this.entities = [];
 
 		for(var i = 0; i < 30; i++) {
@@ -89,7 +92,7 @@ var Planet = Class.extend({
 			targetXRotation = this.worldMesh.rotation.x;
 		}
 
-		if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) > 0.2 ||
+		if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) > 0.4 ||
 	    	Math.abs(targetXRotation - main.planet.worldMesh.rotation.x) > 0.2) {
 	    	this.spinning = true;
 	    } else {
@@ -105,9 +108,6 @@ var Planet = Class.extend({
 	},
 
 	clicked: function(geo) {
-		// geo.face.color = new THREE.Color(0xf2e6e1);
-		// geo.object.geometry.colorsNeedUpdate = true;
-
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
 		var inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
@@ -117,10 +117,8 @@ var Planet = Class.extend({
 		// Old way: from geo.face.
 		// var ring = Math.floor((geo.faceIndex / this.rings) *(this.width/this.rings)), 
 		// 	segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
-
 		// this.tiles[ring][segment] = this.tiles[ring][segment] === 1 ? 0 : 1;
 
-		//var ring =
 		var xpos = pos.x + 180,
 			ypos = 180 - (pos.y + 90);
 
@@ -133,19 +131,24 @@ var Planet = Class.extend({
 	},
 
 	createCanvas: function() {
-		var c = $("<canvas></canvas>", {
-			id: "tex"
-		})[0].getContext("2d");
+		var $canvas = $("<canvas></canvas>", {
+				id: "tex"
+			}),
+			ctx = $canvas[0].getContext("2d");
 
-		c.canvas.width = this.width * 10;
-		c.canvas.height = this.height * 10;
+		ctx.canvas.width = this.width * 10;
+		ctx.canvas.height = this.height * 10;
 
-		c.canvas.webkitImageSmoothingEnabled = false;
-		c.canvas.imageSmoothingEnabled = false;
+		ctx.canvas.webkitImageSmoothingEnabled = false;
+		ctx.canvas.imageSmoothingEnabled = false;
 
-		this.ctx = c;
+		this.ctx = ctx;
 
-		$("body").append(c.canvas);
+		$canvas.on("click", function(){
+			main.planet.populate();
+			main.planet.updateTexture();
+		}).appendTo("#minimap");
+		
 	},
 
 	updateTexture: function() {
@@ -176,7 +179,7 @@ var Planet = Class.extend({
 		img.onload = function(){
 			var texture = new THREE.Texture(img, {});
 			texture.needsUpdate = true;
-			cb(texture);
+			cb && cb(texture);
 			$("#map").replaceWith(img);
 		}
 		img.src = c.canvas.toDataURL("image/png");

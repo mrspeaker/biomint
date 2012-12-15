@@ -1,6 +1,7 @@
 var gfx = {
 	WIDTH: 0,
 	HEIGHT: 0,
+	art: {},
 	init: function() {
 		// set the scene size
 		this.WIDTH = window.innerWidth - 10,
@@ -31,7 +32,6 @@ var gfx = {
 		var ambientLight = new THREE.AmbientLight( 0x111111 );
 		this.scene.add( ambientLight );
 
-
 		this.addStars();
 
 		// start the renderer
@@ -52,10 +52,32 @@ var gfx = {
 		this.renderer.shadowMapWidth = 1024;
 		this.renderer.shadowMapHeight = 1024;
 
-		document.body.appendChild(this.renderer.domElement);
-
+		$("#game").append(this.renderer.domElement)
 		this.addLight();
 	},
+
+	loadImages: function(images, cb) {
+		var toLoad = images.length,
+			self = this;
+
+		if(images.length === 0) {
+			cb && cb();
+			return;
+		}
+		images.forEach(function(asset) {
+		    var image = new Image();
+
+		    image.src = "resources/" + asset.path;
+		    image.onload = function() {
+
+		        if(!(--toLoad)) {
+		            cb && cb();
+		        };
+		    };
+		    self.art[asset.name] = image;
+		});
+	},
+
 	// convert the positions from a lat, lon to a position on a sphere.
     latLongToVec3: function(lat, lon, radius, height) {
     	//x = R * cos(lat) * cos(lon)
