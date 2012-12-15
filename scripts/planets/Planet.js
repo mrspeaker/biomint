@@ -30,9 +30,17 @@ var Planet = Class.extend({
 	reset: function() {
 		this.entities = [];
 
-		for(var i = 0; i < 100; i++) {
+		for(var i = 0; i < 2; i++) {
 			var e = new Entity(this);
-			e.pos = new THREE.Vector2(Math.random() * 180 - 90 | 0, Math.random() * 360 - 180 | 0);
+			e.pos = new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0);
+		}
+
+		for(var i = -180; i < 180; i += 90) {
+			var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
+			var e = new Entity(this, col);
+			e.pos = new THREE.Vector2(i, 0);
+			e.xspeed = 0;
+			e.yspeed = 0;
 		}
 	},
 
@@ -100,13 +108,21 @@ var Planet = Class.extend({
 		// geo.face.color = new THREE.Color(0xf2e6e1);
 		// geo.object.geometry.colorsNeedUpdate = true;
 
-		var ring = Math.floor((geo.faceIndex / this.rings) *(this.width/this.rings)), 
-			segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
+		// WWWWW TTTTTT FFFFF?!
+		// I AM A GODDDDD!
+		var inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
+		var p = inv.multiplyVector3(geo.point);
+		var pos = gfx.vec3ToLatLong(p, this.radius);
+
+		this.entities[1].pos = pos;
 
 
-		this.tiles[ring][segment] = this.tiles[ring][segment] === 1 ? 0 : 1;
+		// var ring = Math.floor((geo.faceIndex / this.rings) *(this.width/this.rings)), 
+		// 	segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
 
-		console.log(ring, segment)
+		// this.tiles[ring][segment] = this.tiles[ring][segment] === 1 ? 0 : 1;
+
+		//var ring = 
 
 		this.updateTexture();
 		

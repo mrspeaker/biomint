@@ -2,11 +2,11 @@ var Entity = Class.extend({
 	mesh: null,
 	pos: null,
 	altitude: 2.5,
-	init: function(planet){
+	init: function(planet, color){
 		this.radius = planet.radius;
-		this.color = Math.random() * 0xffffff;
+		this.color = color || Math.random() * 0xffffff;
 
-		this.pos = new THREE.Vector2(-20, -120);
+		this.pos = new THREE.Vector2(0, 0);
 		this.mesh = new THREE.Mesh(
 		  new THREE.SphereGeometry(2, 5, 5),
 		  new THREE.MeshLambertMaterial({color: this.color}));
@@ -30,6 +30,6 @@ var Entity = Class.extend({
 		this.syncMesh();
 	},
 	syncMesh: function() {
-		this.mesh.position = gfx.latLongToVec3(this.pos.x, this.pos.y, this.radius, this.altitude);
+		this.mesh.position = gfx.latLongToVec3(this.pos.y, this.pos.x, this.radius, this.altitude);
 	}
 });

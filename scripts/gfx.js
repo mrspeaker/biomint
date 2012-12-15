@@ -73,11 +73,27 @@ var gfx = {
         return new THREE.Vector3(x,y,z);
     },
     vec3ToLatLong: function(vec, radius, height) {
-    	// height = height || 1;
-		var lat = 90 - (Math.acos(vec.y / radius)) * 180 / Math.PI;
-		var lng = ((270 + (Math.atan2(vec.x , vec.z)) * 180 / Math.PI) % 360);// -180;
-    	return new THREE.Vector2(lat, lng);
+    	height = height || 1;
+		var lat = 90 - (Math.acos(vec.y / (radius+height))) * 180 / Math.PI;
+		var lng = ((270 + (Math.atan2(vec.x , vec.z)) * 180 / Math.PI) % 360) - 180;
+    	return new THREE.Vector2(lng, lat);
     },
+    // vec3ToLatLong2: function(vec, radius) {
+    // 	var polar:Vector2;
+
+    // 	    //calc longitude
+    // 	    polar.y = Mathf.Atan2(point.x,point.z);
+
+    // 	    //this is easier to write and read than sqrt(pow(x,2), pow(y,2))!
+    // 	    var xzLen = Vector2(point.x,point.z).magnitude; 
+    // 	    //atan2 does the magic
+    // 	    polar.x = Mathf.Atan2(-point.y,xzLen);
+
+    // 	    //convert to deg
+    // 	    polar *= Mathf.Rad2Deg;
+
+    // 	    return polar;
+    // },
 	resize: function() {},
 	render: function() {
 		this.renderer.clear();
