@@ -1,9 +1,14 @@
 var Planet = Class.extend({
 	tiles: [],
 	colors: ["#265b85", "#d2b394"],
-	width: 50,
-	height: 50,
+	
+	width: 60,
+	height: 60,
+
+	segments: 50,
+	rings: 50,
 	radius: 100,
+
 	init: function() {
 		var self = this;
 		this.populate();
@@ -24,7 +29,7 @@ var Planet = Class.extend({
 
 		for(var j = 0; j < this.height; j++){
 			var row = [];
-			for(var i = 0; i < this.height; i++){
+			for(var i = 0; i < this.width; i++){
 				var val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
 				row.push(val > 100 ? 0 : 1);
 			}
@@ -54,12 +59,14 @@ var Planet = Class.extend({
 			targetXRotation = poop.rotation.x;
 		}
 	},
+
 	createCanvas: function() {
 		var c = $("<canvas></canvas>", {
-			id: "tex",
-			width: 400,
-			height: 400
+			id: "tex"
 		})[0].getContext("2d");
+
+		c.canvas.width = this.width * 10;
+		c.canvas.height = this.height * 10;
 
 		c.canvas.webkitImageSmoothingEnabled = false;
 		c.canvas.imageSmoothingEnabled = false;
@@ -74,6 +81,7 @@ var Planet = Class.extend({
 			w = c.canvas.width / this.width | 0,
 			h = c.canvas.height / this.height | 0;
 
+		console.log(h, c.canvas.height, this.height);
 		for(var y = 0; y < this.height; y++) {
 			for(var x = 0; x < this.width; x++) {
 				var tile = this.tiles[y][x];
@@ -97,21 +105,15 @@ var Planet = Class.extend({
 	},
 
 	createPlanet: function(texture) {
-		// set up the sphere vars
-		var segments = this.width,
-		    rings = this.height;
-
-	    // create the sphere's material
-	    var sphereMaterial = new THREE.MeshLambertMaterial({
+		var sphereMaterial = new THREE.MeshLambertMaterial({
 	          color: 0xd4be92,
 	          map: texture
 	        });
 
-		// create a new mesh with sphere geometry
 		var sphereGeo = new THREE.SphereGeometry(
 		    	this.radius,
-		    	segments,
-		    	rings),
+		    	this.segments,
+		    	this.rings),
 			sphere = new THREE.Mesh(
 				sphereGeo,
 		  		sphereMaterial
@@ -124,7 +126,6 @@ var Planet = Class.extend({
 		// 		col = i % self.width;
 		// 	f.color.setHex(self.colors[self.tiles[row][col]]);
 		// });
-
 
 		var atmosphere = {
       			uniforms: {},
