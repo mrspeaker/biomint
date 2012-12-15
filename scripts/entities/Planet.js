@@ -9,13 +9,15 @@ var Planet = Class.extend({
 	rings: 50,
 	radius: 100,
 
+	worldMesh: new THREE.Object3D(),
+
 	init: function() {
 		var self = this;
 		this.populate();
 		
 		this.createCanvas();
 		this.renderTexture(function(tex){
-			poop.add(self.createPlanet(tex));
+			self.worldMesh.add(self.createPlanet(tex));
 		});
 	},
 
@@ -43,20 +45,20 @@ var Planet = Class.extend({
 		if(!this.mesh) { return; }
 		this.mesh.rotation.y += 0.0005;
 
-		var rotx = ( targetXRotation - poop.rotation.x ) * 0.01;
+		var rotx = ( targetXRotation - this.worldMesh.rotation.x ) * 0.01;
 		if(Math.abs(rotx) < 0.001) {
 			rotx = 0;
 			targetXRotation = 0;
  		}
-		poop.rotation.x += rotx;
-		poop.rotation.y += ( targetYRotation - poop.rotation.y ) * 0.03;
+		this.worldMesh.rotation.x += rotx;
+		this.worldMesh.rotation.y += ( targetYRotation - this.worldMesh.rotation.y ) * 0.03;
 		
 		targetXRotation *= 0.95;
-		if(Math.abs(targetXRotation - poop.rotation.x) > 0.001) {
+		if(Math.abs(targetXRotation - this.worldMesh.rotation.x) > 0.001) {
 			targetXRotation *= 0.9
 		} else {
 			targetXRotation  = 0;
-			targetXRotation = poop.rotation.x;
+			targetXRotation = this.worldMesh.rotation.x;
 		}
 	},
 
@@ -119,14 +121,8 @@ var Planet = Class.extend({
 		  		sphereMaterial
 		  	);	
 
-		// var self = this;
-		// sphere.geometry.faces.forEach(function(f, i){
 		// 	//f.color.setHex(map.tilesMath.random()*0xffffff);
-		// 	var row = ~~(i / self.width),
-		// 		col = i % self.width;
-		// 	f.color.setHex(self.colors[self.tiles[row][col]]);
-		// });
-
+		
 		var atmosphere = {
       			uniforms: {},
 
@@ -141,7 +137,7 @@ var Planet = Class.extend({
                   fragmentShader: [
                       "varying vec3 vNormal;",
                       "void main() {",
-                          "float intensity = pow( 0.9 - dot( vNormal, vec3( 0.0, 0.0, 0.2 ) ), 10.0 );",
+                          "float intensity = pow( 0.95 - dot( vNormal, vec3( 0.0, 0.0, 0.2 ) ), 10.0 );",
                           "gl_FragColor = vec4( 0.3, 0.1, 0.1, 0.3 ) * intensity;",
 
                       "}"

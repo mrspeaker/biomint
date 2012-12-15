@@ -1,48 +1,12 @@
-var targetYRotation = targetXRotation = 0;
-var targetYRotationOnMouseDown = targetXRotationOnMouseDown = 0;
-
-var mouseX = 0, mouseY = 0;
-var mouseXOnMouseDown = 0;
+var targetYRotation = targetXRotation = 0,
+	targetYRotationOnMouseDown = targetXRotationOnMouseDown = 0,
+	mouseX = 0, mouseY = 0,
+	mouseXOnMouseDown = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-var poop = new THREE.Object3D();
-
-var s1 = new THREE.Mesh(
-
-  new THREE.SphereGeometry(
-    2,
-    5,
-    5),
-
-  new THREE.MeshLambertMaterial(
-    {
-      color: 0x227d79
-    }));
-
-var s2 = new THREE.Mesh(
-
-  new THREE.SphereGeometry(
-    2,
-    8,
-    8),
-
-  new THREE.MeshLambertMaterial(
-    {
-      color: 0xff7d79
-    }));
-
-s1p = new THREE.Vector2(-20, -120);
-s2p = new THREE.Vector2(60, -140);
-s1.receiveShadow = true;
-s2.receiveShadow = true;
-
-s1.castShadow = true;
-s2.castShadow = true;
-
-poop.add(s1);
-poop.add(s2);
+var s1, s2, s1p, s2p;
 
 var planet;
 
@@ -51,12 +15,28 @@ var main = {
 		gfx.init();
 		
 		planet = new Planet();
-		
+
+		var s1 = new THREE.Mesh(
+		  new THREE.SphereGeometry(2, 5, 5),
+		  new THREE.MeshLambertMaterial({color: 0x227d79}));
+
+		var s2 = new THREE.Mesh(
+		  new THREE.SphereGeometry(2, 8, 8),
+		  new THREE.MeshLambertMaterial({ color: 0xff7d79 }));
+
+		s1p = new THREE.Vector2(-20, -120);
+		s2p = new THREE.Vector2(60, -140);
+		s1.receiveShadow = true;
+		s2.receiveShadow = true;
+		s1.castShadow = true;
+		s2.castShadow = true;
 		s1.position = gfx.latLongToVec3(s1p.x, s1p.y, 100, 2.5);
 		s2.position = gfx.latLongToVec3(s2p.x, s2p.y, 100, 2);
 
+		planet.worldMesh.add(s1);
+		planet.worldMesh.add(s2);
 
-		gfx.scene.add(poop);
+		gfx.scene.add(planet.worldMesh);
 
 		(function animate() {
 			planet.tick();
@@ -72,8 +52,8 @@ var main = {
 		function clickIt(e) {
 		    e.preventDefault();
 
-		    if(Math.abs(targetYRotation - poop.rotation.y) > 0.2 ||
-		    	Math.abs(targetXRotation - poop.rotation.x) > 0.2) {
+		    if(Math.abs(targetYRotation - planet.worldMesh.rotation.y) > 0.2 ||
+		    	Math.abs(targetXRotation - planet.worldMesh.rotation.x) > 0.2) {
 		    	return;
 		    }
 
@@ -82,7 +62,7 @@ var main = {
 		    
 		    gfx.projector.unprojectVector(vector, gfx.camera);
 		    var ray = new THREE.Ray(gfx.camera.position, vector.subSelf(gfx.camera.position).normalize()),
-		    	intersects = ray.intersectObjects(poop.children);
+		    	intersects = ray.intersectObjects(planet.worldMesh.children);
 
 		    if(!intersects.length) {
 		    	return;
@@ -118,15 +98,15 @@ var main = {
  			
  			//THREE.GeometryUtils.merge(planet.mesh.geometry, cube);
 
- 			//cube.position.copy(pos);
- 			cube.position = intersects[0].face.normal
-			//cube.matrixAutoUpdate = false;
-			//cube.updateMatrix();
- 			//gfx.scene.add(cube);
- 			poop.add(cube);
+ 		// 	//cube.position.copy(pos);
+ 		// 	cube.position = intersects[0].face.normal
+			// //cube.matrixAutoUpdate = false;
+			// //cube.updateMatrix();
+ 		// 	//gfx.scene.add(cube);
+ 		// 	planet.worldMesh.add(cube);
 			
- 			//THREE.GeometryUtils.merge(geometry, otherGeometry);
- 			THREE.GeometryUtils.merge(planet.mesh.geometry, cube);
+ 		// 	//THREE.GeometryUtils.merge(geometry, otherGeometry);
+ 			//THREE.GeometryUtils.merge(planet.mesh.geometry, cube);
  			//gfx.scene.add(cube);
 
 
