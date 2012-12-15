@@ -30,12 +30,12 @@ var Planet = Class.extend({
 	reset: function() {
 		this.entities = [];
 
-		for(var i = 0; i < 2; i++) {
+		for(var i = 0; i < 30; i++) {
 			var e = new Entity(this);
 			e.pos = new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0);
 		}
 
-		for(var i = -180; i < 180; i += 90) {
+		for(var i = -180; i < 180; i += 45) {
 			var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
 			var e = new Entity(this, col);
 			e.pos = new THREE.Vector2(i, 0);
@@ -111,19 +111,23 @@ var Planet = Class.extend({
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
 		var inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
-		var p = inv.multiplyVector3(geo.point);
-		var pos = gfx.vec3ToLatLong(p, this.radius);
+		var rotatedPoint = inv.multiplyVector3(geo.point);
+		var pos = gfx.vec3ToLatLong(rotatedPoint, this.radius);
 
-		this.entities[1].pos = pos;
-
-
+		// Old way: from geo.face.
 		// var ring = Math.floor((geo.faceIndex / this.rings) *(this.width/this.rings)), 
 		// 	segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
 
 		// this.tiles[ring][segment] = this.tiles[ring][segment] === 1 ? 0 : 1;
 
-		//var ring = 
+		//var ring =
+		var xpos = pos.x + 180,
+			ypos = 180 - (pos.y + 90);
 
+		var xcell = (xpos / 360) * this.width | 0,
+			ycell = (ypos / 180) * this.height | 0;
+		
+		this.tiles[ycell][xcell] = this.tiles[ycell][xcell] === 1 ? 0 : 1;
 		this.updateTexture();
 		
 	},
