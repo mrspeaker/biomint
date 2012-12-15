@@ -1,24 +1,20 @@
 var Planet = Class.extend({
 	tiles: [],
 	colors: [0x265b85, 0xd2b394],
-	width: 32,
-	height: 32,
+	width: 50,
+	height: 50,
 	populate: function() {
 
 		var inc = 0;
-        var freq = 1/5;
+        var freq = 1/13;
         var  z = Math.random() * 1000;
 
-   
-        var x = 1;
-        var y = 1;
-        var n = Math.abs(noise(x * freq, y * freq, z)) * 500;
-        
+		var n = new ClassicalNoise();   
 
 		for(var j = 0; j < this.height; j++){
 			var row = [];
 			for(var i = 0; i < this.height; i++){
-				var val = Math.floor(Math.abs(noise(i * freq, j * freq, z)) * 500);
+				var val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
 				row.push(val > 100 ? 0 : 1);
 			}
 			this.tiles.push(row);
