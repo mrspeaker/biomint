@@ -27,6 +27,11 @@ var Planet = Class.extend({
 
 	reset: function() {
 		this.entities = [];
+
+		for(var i = 0; i < 20; i++) {
+			var e = new Entity(this);
+			e.pos = new THREE.Vector2(Math.random() * 180 - 90 | 0, Math.random() * 360 - 180 | 0);
+		}
 	},
 
 	add: function(ent) {
@@ -146,8 +151,6 @@ var Planet = Class.extend({
 				sphereGeo,
 		  		sphereMaterial
 		  	);	
-
-		// 	//f.color.setHex(map.tilesMath.random()*0xffffff);
 		
 		var atmosphere = {
       			uniforms: {},

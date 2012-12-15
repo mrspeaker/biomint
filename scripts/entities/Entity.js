@@ -16,11 +16,15 @@ var Entity = Class.extend({
 		
 		this.syncMesh();
 
+		this.xspeed = Math.random() - 0.5;
+		this.yspeed = Math.random() - 0.5;
+
+
 		planet.add(this);
 	},
 	tick: function() {
-		this.pos.x += 0.1;
-		this.pos.y += 0.2;
+		this.pos.x += this.xspeed;
+		this.pos.y += this.yspeed;
 		
 		this.syncMesh();
 	},

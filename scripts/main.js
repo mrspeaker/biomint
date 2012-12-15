@@ -1,21 +1,13 @@
 
-var planet;
-
 var main = {
+	planet: null,
 	init: function() {
 		gfx.init();
 		input.init();
 		
-		planet = new Planet();
-		
-		for(var i = 0; i < 200; i++) {
-			var e = new Entity(planet);
-			e.pos = new THREE.Vector2(Math.random() * 180 - 90 | 0, Math.random() * 360 - 180 | 0);
-		}
+		this.planet = new Planet();
 
-		
-		gfx.scene.add(planet.worldMesh);
-
+		gfx.scene.add(this.planet.worldMesh);
 		this.run();
 
 	},
@@ -30,7 +22,7 @@ var main = {
 	},
 
 	tick: function() {
-		planet.tick();
+		this.planet.tick();
 	},
 
 	render: function() {

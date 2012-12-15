@@ -4,7 +4,7 @@ var targetYRotation = targetXRotation = 0,
 	mouseXOnMouseDown = 0,
 	windowHalfX = window.innerWidth / 2,
 	windowHalfY = window.innerHeight / 2;
-	
+
 
 var input = {
 	init: function(){
@@ -26,8 +26,8 @@ var input = {
 		});
 	},
 	onClick: function(e){
-		    if(Math.abs(targetYRotation - planet.worldMesh.rotation.y) > 0.2 ||
-		    	Math.abs(targetXRotation - planet.worldMesh.rotation.x) > 0.2) {
+		    if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) > 0.2 ||
+		    	Math.abs(targetXRotation - main.planet.worldMesh.rotation.x) > 0.2) {
 		    	return;
 		    }
 
@@ -36,7 +36,7 @@ var input = {
 		    
 		    gfx.projector.unprojectVector(vector, gfx.camera);
 		    var ray = new THREE.Ray(gfx.camera.position, vector.subSelf(gfx.camera.position).normalize()),
-		    	intersects = ray.intersectObjects(planet.worldMesh.children);
+		    	intersects = ray.intersectObjects(main.planet.worldMesh.children);
 
 		    if(!intersects.length) {
 		    	return;
@@ -60,7 +60,7 @@ var input = {
 
 			console.log(intersects[0].face)
 
-			planet.updateTexture();
+			main.planet.updateTexture();
 
 			var cube = new THREE.Mesh( new THREE.CubeGeometry( 10, 10, 10 ), new THREE.MeshNormalMaterial() );
 			var pos = THREE.Vector3();

@@ -10,8 +10,11 @@
 5b. XXXXX Draw texture to canvas and wrap!
 5c. Click locationto map ref.
 
-6. Generate minerals (perlin?)
-7. Add collect mechaninc
-8. Add "cities"
-9. Expand cities
-10. Add lobby mechanic
+
+6. XXXX Add entities
+
+7. Generate minerals (perlin?)
+8. Add collect mechaninc
+9. Add "cities"
+10. Expand cities
+11. Add lobby mechanic

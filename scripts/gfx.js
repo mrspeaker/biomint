@@ -3,8 +3,8 @@ var gfx = {
 	HEIGHT: 0,
 	init: function() {
 		// set the scene size
-		this.WIDTH = window.innerWidth - 100,
-		this.HEIGHT = window.innerHeight - 100;
+		this.WIDTH = window.innerWidth - 10,
+		this.HEIGHT = window.innerHeight - 10;
 
 		// set some camera attributes
 		var VIEW_ANGLE = 45,
