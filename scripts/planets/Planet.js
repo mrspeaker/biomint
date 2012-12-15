@@ -11,6 +11,8 @@ var Planet = Class.extend({
 
 	worldMesh: new THREE.Object3D(),
 
+	entities: [],
+
 	init: function() {
 		var self = this;
 		this.populate();
@@ -19,6 +21,17 @@ var Planet = Class.extend({
 		this.renderTexture(function(tex){
 			self.worldMesh.add(self.createPlanet(tex));
 		});
+
+		this.reset();
+	},
+
+	reset: function() {
+		this.entities = [];
+	},
+
+	add: function(ent) {
+		this.entities.push(ent);
+		this.worldMesh.add(ent.mesh);
 	},
 
 	populate: function() {
@@ -61,6 +74,11 @@ var Planet = Class.extend({
 			targetXRotation  = 0;
 			targetXRotation = this.worldMesh.rotation.x;
 		}
+
+
+		this.entities.forEach(function(ent){
+			ent.tick();
+		})
 	},
 
 	createCanvas: function() {
