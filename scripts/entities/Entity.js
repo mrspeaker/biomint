@@ -23,6 +23,7 @@ var Entity = Class.extend({
 		planet.add(this);
 	},
 	tick: function() {
+
 		this.pos.x += this.xspeed;
 		this.pos.y += this.yspeed;
 		

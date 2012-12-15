@@ -9,6 +9,8 @@ var Planet = Class.extend({
 	rings: 50,
 	radius: 100,
 
+	spinning: false,
+
 	worldMesh: new THREE.Object3D(),
 
 	entities: [],
@@ -28,7 +30,7 @@ var Planet = Class.extend({
 	reset: function() {
 		this.entities = [];
 
-		for(var i = 0; i < 20; i++) {
+		for(var i = 0; i < 100; i++) {
 			var e = new Entity(this);
 			e.pos = new THREE.Vector2(Math.random() * 180 - 90 | 0, Math.random() * 360 - 180 | 0);
 		}
@@ -62,8 +64,7 @@ var Planet = Class.extend({
 	tick: function() {
 		// Todo - shouldn't process display stuff in tick
 		if(!this.mesh) { return; }
-		this.mesh.rotation.y += 0.0005;
-
+		
 		var rotx = ( targetXRotation - this.worldMesh.rotation.x ) * 0.01;
 		if(Math.abs(rotx) < 0.001) {
 			rotx = 0;
@@ -80,10 +81,35 @@ var Planet = Class.extend({
 			targetXRotation = this.worldMesh.rotation.x;
 		}
 
+		if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) > 0.2 ||
+	    	Math.abs(targetXRotation - main.planet.worldMesh.rotation.x) > 0.2) {
+	    	this.spinning = true;
+	    } else {
+	    	this.spinning = false;
+	    }
+
+	    this.worldMesh.rotation.y += 0.005;
+
 
 		this.entities.forEach(function(ent){
 			ent.tick();
 		})
+	},
+
+	clicked: function(geo) {
+		// geo.face.color = new THREE.Color(0xf2e6e1);
+		// geo.object.geometry.colorsNeedUpdate = true;
+
+		var ring = Math.floor((geo.faceIndex / this.rings) *(this.width/this.rings)), 
+			segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
+
+
+		this.tiles[ring][segment] = this.tiles[ring][segment] === 1 ? 0 : 1;
+
+		console.log(ring, segment)
+
+		this.updateTexture();
+		
 	},
 
 	createCanvas: function() {
@@ -103,7 +129,7 @@ var Planet = Class.extend({
 	},
 
 	updateTexture: function() {
-		this.populate();
+		//this.populate();
 		var self = this;
 		this.renderTexture(function(tex){
 			self.mesh.material.map = tex

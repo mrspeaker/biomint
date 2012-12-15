@@ -26,67 +26,39 @@ var input = {
 		});
 	},
 	onClick: function(e){
-		    if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) > 0.2 ||
-		    	Math.abs(targetXRotation - main.planet.worldMesh.rotation.x) > 0.2) {
-		    	return;
-		    }
+		if(main.planet.spinning) {
+			return;
+		}
 
-		    // TODO: not quite relative to screen...
-			var vector = new THREE.Vector3((e.clientX / gfx.WIDTH) * 2 - 1, - (e.clientY / gfx.HEIGHT) * 2 + 1, 0.5);
-		    
-		    gfx.projector.unprojectVector(vector, gfx.camera);
-		    var ray = new THREE.Ray(gfx.camera.position, vector.subSelf(gfx.camera.position).normalize()),
-		    	intersects = ray.intersectObjects(main.planet.worldMesh.children);
+		var vector = new THREE.Vector3((e.clientX / gfx.WIDTH) * 2 - 1, - (e.clientY / gfx.HEIGHT) * 2 + 1, 0.5);
+		gfx.projector.unprojectVector(vector, gfx.camera);
+		var ray = new THREE.Ray(gfx.camera.position, vector.subSelf(gfx.camera.position).normalize()),
+			intersects = ray.intersectObjects([main.planet.mesh]);//worldMesh.children);
 
-		    if(!intersects.length) {
-		    	return;
-		    }
-			// //determine faceNr and id
-			// var faceNr = -1;
-			// var FC = intersects[0].face;
-			// var fc;
-			// var geo = intersects[0].object.geometry;
-			// if (!geo) {return console.log('nothing');}
-			// for (var f = 0; f < geo.faces.length; ++f) {
-			//     fc = geo.faces[f];
-			//     if (FC.a===fc.a && FC.b===fc.b && FC.c===fc.c && FC.d===fc.d) {
-			//         faceNr = f;
-			//         break;
-			//     }
-			// }
+		if(!intersects.length) {
+			return;
+		}
 
-			intersects[0].face.color = new THREE.Color(0xf2e6e1);
-			intersects[0].object.geometry.colorsNeedUpdate = true;
+		main.planet.clicked(intersects[0]);
+		// //determine faceNr and id
+		// var faceNr = -1;
+		// var FC = intersects[0].face;
+		// var fc;
+		// var geo = intersects[0].object.geometry;
+		// if (!geo) {return console.log('nothing');}
+		// for (var f = 0; f < geo.faces.length; ++f) {
+		//     fc = geo.faces[f];
+		//     if (FC.a===fc.a && FC.b===fc.b && FC.c===fc.c && FC.d===fc.d) {
+		//         faceNr = f;
+		//         break;
+		//     }
+		// }
 
-			console.log(intersects[0].face)
-
-			main.planet.updateTexture();
-
-			var cube = new THREE.Mesh( new THREE.CubeGeometry( 10, 10, 10 ), new THREE.MeshNormalMaterial() );
-			var pos = THREE.Vector3();
-
-
- 			//pos.copy(intersects[0].face.normal );
-
-			//pos//.add( intersector.point, intersector.object.matrixRotationWorld.multiplyVector3( tmpVec ) );
-
-			
-			//cube.z;
-
- 			
- 			//THREE.GeometryUtils.merge(planet.mesh.geometry, cube);
-
- 		// 	//cube.position.copy(pos);
- 		// 	cube.position = intersects[0].face.normal
-			// //cube.matrixAutoUpdate = false;
-			// //cube.updateMatrix();
- 		// 	//gfx.scene.add(cube);
- 		// 	planet.worldMesh.add(cube);
-			
- 		// 	//THREE.GeometryUtils.merge(geometry, otherGeometry);
- 			//THREE.GeometryUtils.merge(planet.mesh.geometry, cube);
- 			//gfx.scene.add(cube);
-
+		//var cube = new THREE.Mesh( new THREE.CubeGeometry( 10, 10, 10 ), new THREE.MeshNormalMaterial() );
+		//var pos = THREE.Vector3();
+		//pos.copy(intersects[0].face.normal );
+		//pos//.add( intersector.point, intersector.object.matrixRotationWorld.multiplyVector3( tmpVec ) );
+		//THREE.GeometryUtils.merge(planet.mesh.geometry, cube);
 	}
 };
 

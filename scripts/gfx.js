@@ -63,8 +63,8 @@ var gfx = {
 		//z = R *sin(lat)
 		
     	height = height || 1;
-        var phi = (lat)*Math.PI/180;
-        var theta = (lon-180)*Math.PI/180;
+        var phi =  lat * (Math.PI / 180),
+        	theta = (lon - 180) * (Math.PI / 180);
  
         var x = -(radius+height) * Math.cos(phi) * Math.cos(theta);
         var y = (radius+height) * Math.sin(phi);
@@ -72,9 +72,11 @@ var gfx = {
  
         return new THREE.Vector3(x,y,z);
     },
-    vec3ToLatLong: function(v3) {
-    	//lat = asin(z / R)
-   		//	lon = atan2(y, x)
+    vec3ToLatLong: function(vec, radius, height) {
+    	// height = height || 1;
+		var lat = 90 - (Math.acos(vec.y / radius)) * 180 / Math.PI;
+		var lng = ((270 + (Math.atan2(vec.x , vec.z)) * 180 / Math.PI) % 360);// -180;
+    	return new THREE.Vector2(lat, lng);
     },
 	resize: function() {},
 	render: function() {
