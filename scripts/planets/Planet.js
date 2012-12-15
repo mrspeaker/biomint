@@ -33,18 +33,18 @@ var Planet = Class.extend({
 
 		this.entities = [];
 
-		for(var i = 0; i < 30; i++) {
+		for(var i = 0; i < 10; i++) {
 			var e = new Entity(this);
 			e.pos = new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0);
 		}
 
-		for(var i = -180; i < 180; i += 45) {
-			var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
-			var e = new Entity(this, col);
-			e.pos = new THREE.Vector2(i, 0);
-			e.xspeed = 0;
-			e.yspeed = 0;
-		}
+		// for(var i = -180; i < 180; i += 45) {
+		// 	var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
+		// 	var e = new Entity(this, col);
+		// 	e.pos = new THREE.Vector2(i, 0);
+		// 	e.xspeed = 0;
+		// 	e.yspeed = 0;
+		// }
 	},
 
 	add: function(ent) {
@@ -107,6 +107,20 @@ var Planet = Class.extend({
 		})
 	},
 
+	useTool: function(xcell, ycell, xpos, ypos) {
+		if(main.level.tool === "search") {
+			var col = 0xFFFF00;
+			var e = new Entity(this, col);
+			e.pos = new THREE.Vector2(xpos, ypos);
+			e.xspeed = 0;
+			e.yspeed = 0;
+		}
+		if(main.level.tool === "mine") {
+			this.tiles[ycell][xcell] = this.tiles[ycell][xcell] === 1 ? 0 : 1;
+			this.updateTexture();
+		}
+	},
+
 	clicked: function(geo, selected) {
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
@@ -129,8 +143,7 @@ var Planet = Class.extend({
 			this._downOn = [xcell, ycell];
 		} else {
 			if(xcell === this._downOn[0] && ycell === this._downOn[1]) {
-				this.tiles[ycell][xcell] = this.tiles[ycell][xcell] === 1 ? 0 : 1;
-				this.updateTexture();
+				this.useTool(xcell, ycell, pos.x, pos.y);
 			}
 		}
 		
