@@ -10,26 +10,12 @@
 				padding: 0;
 			}
 
-			#board {
+			#tex {
 				position: absolute;
-				opacity: 0.5;
 				top: 0;
 				left: 0;
-
-			}
-			#board .row {
-				clear: left;
-			}
-			#board .cell {
-				width: 6px;
-				height: 6px;
-				float:left;
-			}
-			.land {
-				background-color: hsl(30, 40%, 70%);
-			}
-			.water {
-				background-color: hsl(220, 40%, 70%);
+				width: 150px !important;
+				height: 150px !important;
 			}
 		</style>
 	</head>
@@ -43,10 +29,8 @@
 		<script src="scripts/entities/Planet.js" type="text/javascript" charset="utf-8"></script>
 		
 		<script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
-		<script src="scripts/test.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">
 			main.init();
-			test.init();
 		</script>
 	</body>
 </html>

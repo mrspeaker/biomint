@@ -49,15 +49,14 @@ var planet;
 var main = {
 	init: function() {
 		gfx.init();
-		planet = new Planet();
-		planet.populate();
-
-		poop.add(planet.createPlanet())
-		gfx.scene.add(poop);
 		
+		planet = new Planet();
 		
 		s1.position = gfx.latLongToVec3(s1p.x, s1p.y, 100, 2.5);
 		s2.position = gfx.latLongToVec3(s2p.x, s2p.y, 100, 2);
+
+
+		gfx.scene.add(poop);
 
 		(function animate() {
 			planet.tick();

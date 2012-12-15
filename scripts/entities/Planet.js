@@ -1,8 +1,19 @@
 var Planet = Class.extend({
 	tiles: [],
-	colors: [0x265b85, 0xd2b394],
+	colors: ["#265b85", "#d2b394"],
 	width: 50,
 	height: 50,
+	radius: 100,
+	init: function() {
+		var self = this;
+		this.populate();
+		
+		this.createCanvas();
+		this.renderTexture(function(tex){
+			poop.add(self.createPlanet(tex));
+		});
+	},
+
 	populate: function() {
 
 		var inc = 0;
@@ -19,9 +30,12 @@ var Planet = Class.extend({
 			}
 			this.tiles.push(row);
 		}
-		console.log(this.tiles);
+	
 	},
+
 	tick: function() {
+		// Todo - shouldn't process display stuff in tick
+		if(!this.mesh) { return; }
 		this.mesh.rotation.y += 0.0005;
 
 		var rotx = ( targetXRotation - poop.rotation.x ) * 0.01;
@@ -40,22 +54,62 @@ var Planet = Class.extend({
 			targetXRotation = poop.rotation.x;
 		}
 	},
-	createPlanet: function() {
+	createCanvas: function() {
+		var c = $("<canvas></canvas>", {
+			id: "tex",
+			width: 400,
+			height: 400
+		})[0].getContext("2d");
+
+		c.canvas.webkitImageSmoothingEnabled = false;
+		c.canvas.imageSmoothingEnabled = false;
+
+		this.ctx = c;
+
+		$("body").append(c.canvas);
+	},
+
+	renderTexture: function(cb) {
+		var c = this.ctx,
+			w = c.canvas.width / this.width | 0,
+			h = c.canvas.height / this.height | 0;
+
+		for(var y = 0; y < this.height; y++) {
+			for(var x = 0; x < this.width; x++) {
+				var tile = this.tiles[y][x];
+				var type = this.colors[tile];
+				
+				c.fillStyle = type;
+				c.fillRect(x * w, y * h, w, h);
+			}
+		}
+
+		var img = new Image(),
+			self = this;
+		img.onload = function(){
+			var texture = new THREE.Texture(img, {});
+			texture.needsUpdate = true;
+			cb(texture);
+			$("#map").replaceWith(img);
+		}
+		img.src = c.canvas.toDataURL("image/png");
+
+	},
+
+	createPlanet: function(texture) {
 		// set up the sphere vars
-		var radius = 100,
-		    segments = this.width,
+		var segments = this.width,
 		    rings = this.height;
 
 	    // create the sphere's material
 	    var sphereMaterial = new THREE.MeshLambertMaterial({
 	          color: 0xd4be92,
-	          vertexColors: THREE.FaceColors,
-	          blending: THREE.AdditiveBlending
+	          map: texture
 	        });
 
 		// create a new mesh with sphere geometry
 		var sphereGeo = new THREE.SphereGeometry(
-		    	radius,
+		    	this.radius,
 		    	segments,
 		    	rings),
 			sphere = new THREE.Mesh(
@@ -63,13 +117,13 @@ var Planet = Class.extend({
 		  		sphereMaterial
 		  	);	
 
-		var self = this;
-		sphere.geometry.faces.forEach(function(f, i){
-			//f.color.setHex(map.tilesMath.random()*0xffffff);
-			var row = ~~(i / self.width),
-				col = i % self.width;
-			f.color.setHex(self.colors[self.tiles[row][col]]);
-		});
+		// var self = this;
+		// sphere.geometry.faces.forEach(function(f, i){
+		// 	//f.color.setHex(map.tilesMath.random()*0xffffff);
+		// 	var row = ~~(i / self.width),
+		// 		col = i % self.width;
+		// 	f.color.setHex(self.colors[self.tiles[row][col]]);
+		// });
 
 
 		var atmosphere = {
@@ -94,7 +148,6 @@ var Planet = Class.extend({
     	};
 
 
-
 		var shader = atmosphere,
 		    uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
@@ -116,7 +169,6 @@ var Planet = Class.extend({
     	sphere.castShadow = true;
     	sphere.receiveShadow = true;
 
-		
 		this.mesh = sphere;
 		return sphere;
 	}
