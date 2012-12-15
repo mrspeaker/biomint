@@ -29,6 +29,7 @@ var Planet = Class.extend({
 
 		var n = new ClassicalNoise();   
 
+		this.tiles = [];
 		for(var j = 0; j < this.height; j++){
 			var row = [];
 			for(var i = 0; i < this.width; i++){
@@ -78,12 +79,19 @@ var Planet = Class.extend({
 		$("body").append(c.canvas);
 	},
 
+	updateTexture: function() {
+		this.populate();
+		var self = this;
+		this.renderTexture(function(tex){
+			self.mesh.material.map = tex
+		});
+	},
+
 	renderTexture: function(cb) {
 		var c = this.ctx,
 			w = c.canvas.width / this.width | 0,
 			h = c.canvas.height / this.height | 0;
 
-		console.log(h, c.canvas.height, this.height);
 		for(var y = 0; y < this.height; y++) {
 			for(var x = 0; x < this.width; x++) {
 				var tile = this.tiles[y][x];

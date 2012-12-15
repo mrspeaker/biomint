@@ -86,8 +86,12 @@ var main = {
 
 			console.log(intersects[0].face)
 
+			planet.updateTexture();
+
 			var cube = new THREE.Mesh( new THREE.CubeGeometry( 10, 10, 10 ), new THREE.MeshNormalMaterial() );
 			var pos = THREE.Vector3();
+
+
  			//pos.copy(intersects[0].face.normal );
 
 			//pos//.add( intersector.point, intersector.object.matrixRotationWorld.multiplyVector3( tmpVec ) );
