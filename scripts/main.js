@@ -2,6 +2,10 @@
 var main = {
 	planet: null,
 	level: null,
+
+	dollars: 1000000,
+	
+	
 	init: function() {
 		gfx.init();
 		input.init();

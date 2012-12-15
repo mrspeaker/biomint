@@ -107,7 +107,7 @@ var Planet = Class.extend({
 		})
 	},
 
-	clicked: function(geo) {
+	clicked: function(geo, selected) {
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
 		var inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
@@ -124,9 +124,15 @@ var Planet = Class.extend({
 
 		var xcell = (xpos / 360) * this.width | 0,
 			ycell = (ypos / 180) * this.height | 0;
-		
-		this.tiles[ycell][xcell] = this.tiles[ycell][xcell] === 1 ? 0 : 1;
-		this.updateTexture();
+
+		if(!selected) {
+			this._downOn = [xcell, ycell];
+		} else {
+			if(xcell === this._downOn[0] && ycell === this._downOn[1]) {
+				this.tiles[ycell][xcell] = this.tiles[ycell][xcell] === 1 ? 0 : 1;
+				this.updateTexture();
+			}
+		}
 		
 	},
 
