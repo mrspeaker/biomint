@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>And now it looks like it might actually happen</title>
+		<meta charset="utf-8" />
+		<style type="text/css">
+			body {
+				background-color: #181111;
+				margin: 0;
+				padding: 0;
+			}
+
+			#board {
+				position: absolute;
+				opacity: 0.5;
+				top: 0;
+				left: 0;
+
+			}
+			#board .row {
+				clear: left;
+			}
+			#board .cell {
+				width: 8px;
+				height: 8px;
+				float:left;
+			}
+			.land {
+				background-color: hsl(30, 40%, 70%);
+			}
+			.water {
+				background-color: hsl(220, 40%, 70%);
+			}
+		</style>
+	</head>
+	<body>
+		<script src="vendor/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="vendor/base.js" type="text/javascript" charset="utf-8"></script>
+		<script src="vendor/three.js" type="text/javascript" charset="utf-8"></script>
+		<script src="vendor/noise.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="scripts/gfx.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/entities/Planet.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="scripts/main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/test.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			main.init();
+			test.init();
+		</script>
+	</body>
+</html>
