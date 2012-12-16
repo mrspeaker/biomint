@@ -18,6 +18,7 @@ var Explosive = Entity.extend({
 			case "countdown":
 				if(this.state.count === 100) {
 					this.planet.explode(this.pos);
+					ParticleController.create(this.mesh.position.clone());
 					this.state.change("dead");
 				}
 				break;

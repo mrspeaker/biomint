@@ -1,8 +1,8 @@
 
+
 var main = {
 	planet: null,
 	level: null,
-
 
 	dollars: 3000000,
 	sharePrice: 0.1,
@@ -11,14 +11,13 @@ var main = {
 	init: function() {
 		gfx.init();
 		input.init();
+		ParticleController.init();
 
 		this.planet = new Planet();
 		this.level = new Level(this.planet);
 
 		gfx.scene.add(this.planet.worldMesh);
-		this.run();
-
-
+		
 		var self = this;
 		$("#gui").on("click", "li", function(){
 			var tool = $(this).data("tool");
@@ -27,6 +26,7 @@ var main = {
 			$(this).addClass("selected");
 		});
 
+		this.run();
 	},
 
 	run: function(){
@@ -39,6 +39,9 @@ var main = {
 	},
 
 	tick: function() {
+
+		ParticleController.tick();
+
 		this.planet.tick();
 	},
 

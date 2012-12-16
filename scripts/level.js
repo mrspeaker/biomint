@@ -3,7 +3,7 @@ var Level = Class.extend({
 	planet: null,
 	init: function(planet){
 		this.planet = planet;
-		this.changeTool("none");
+		this.changeTool("explode");
 	},
 	changeTool: function(tool) {
 		this.tool = tool;

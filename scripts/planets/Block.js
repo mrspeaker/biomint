@@ -19,7 +19,6 @@ var Block = Class.extend({
 		}
 		if(this.height <= 0) {
 			this.height = 0;
-			//this.planet.removeDirt(this);
 		}
 		
 	}

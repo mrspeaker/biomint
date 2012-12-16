@@ -178,12 +178,13 @@ var Planet = Class.extend({
 			curY = 0,
 			curX = 0;
 
-		for(var j = -2; j < 2; j++) {
+		for(var j = -2; j <= 2; j++) {
 			curY = j + ycell;
-			for(var i = -2; i < 2; i++) {
+			for(var i = -2; i <= 2; i++) {
 				curX = i + xcell;
-				if(map[curY] < 0 || map[curY] > map.length) continue;
-				if(map[curY][curX] < 0 || map[curY][curX] > map[0].length) continue;
+				if(curY < 0 || curY > map.length - 1) continue;
+				if(curX < 0 || curX > map[0].length - 1) continue;
+
 				var damage = 0;
 				if(i == 0 && j == 0) damage = 30;
 				else if(Math.abs(i) == 1 || Math.abs(j) == 1) damage = 15;
@@ -191,8 +192,6 @@ var Planet = Class.extend({
 				map[curY][curX].addDamage(damage);
 			}
 		}
-
-
 		//var block = this.tiles[mapRef[1]][mapRef[0]];
 		
 		//block.addDamage(30);
