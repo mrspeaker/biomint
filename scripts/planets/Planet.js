@@ -33,8 +33,8 @@ var Planet = Class.extend({
 
 		this.entities = [];
 
-		for(var i = 0; i < 10; i++) {
-			var e = new Entity(this);
+		for(var i = 0; i < 20; i++) {
+			var e = new Rover(this);
 			e.pos = new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0);
 		}
 
@@ -107,20 +107,6 @@ var Planet = Class.extend({
 		})
 	},
 
-	useTool: function(xcell, ycell, xpos, ypos) {
-		if(main.level.tool === "search") {
-			var col = 0xFFFF00;
-			var e = new Entity(this, col);
-			e.pos = new THREE.Vector2(xpos, ypos);
-			e.xspeed = 0;
-			e.yspeed = 0;
-		}
-		if(main.level.tool === "mine") {
-			this.tiles[ycell][xcell] = this.tiles[ycell][xcell] === 1 ? 0 : 1;
-			this.updateTexture();
-		}
-	},
-
 	clicked: function(geo, selected) {
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
@@ -143,7 +129,7 @@ var Planet = Class.extend({
 			this._downOn = [xcell, ycell];
 		} else {
 			if(xcell === this._downOn[0] && ycell === this._downOn[1]) {
-				this.useTool(xcell, ycell, pos.x, pos.y);
+				main.level.useTool(xcell, ycell, pos.x, pos.y);
 			}
 		}
 		

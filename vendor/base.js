@@ -48,6 +48,10 @@
       if ( !initializing && this.init ) {
         this.init.apply(this, arguments);
       }
+
+      if ( !initializing && this.init_post ) {
+        this.init_post.apply(this, arguments);
+      }
     }
     
     // Populate our constructed prototype object

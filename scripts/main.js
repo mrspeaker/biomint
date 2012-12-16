@@ -11,7 +11,7 @@ var main = {
 		input.init();
 
 		this.planet = new Planet();
-		this.level = new Level();
+		this.level = new Level(this.planet);
 
 		gfx.scene.add(this.planet.worldMesh);
 		this.run();
