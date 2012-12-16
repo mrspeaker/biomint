@@ -1,8 +1,17 @@
+var audiores= [
+	{ name: "button", path: "resources/audio/button", volume: 0.8, loop: false},
+	{ name: "button2", path: "resources/audio/button2", volume: 0.8, loop: false},
+	{ name: "bomb", path: "resources/audio/deploy", volume: 0.8, loop: false},
+	{ name: "explode", path: "resources/audio/explode", volume: 0.7, loop: false },
+	{ name: "scout", path: "resources/audio/scout", volume: 0.7, loop: false },
+	{ name: "drone", path: "resources/audio/drone", volume: 0.2, loop: true }
+];
 
 
 var main = {
 	planet: null,
 	level: null,
+	drongo: false,
 
 	dollars: 0,
 	sharePrice: 1.05,
@@ -11,6 +20,8 @@ var main = {
 	init: function() {
 		gfx.init();
 		input.init();
+		audio.init(audiores);	
+
 		ParticleController.init();
 
 		this.planet = new Planet();
@@ -42,6 +53,13 @@ var main = {
 	tick: function() {
 
 		ParticleController.tick();
+
+		if(!this.drongo) {
+			if(audio.get("drone").loaded) {
+				audio.get("drone").backPlay();
+				this.drongo = true;
+			}
+		}
 
 		this.planet.tick();
 	},

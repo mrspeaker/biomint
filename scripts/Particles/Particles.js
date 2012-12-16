@@ -61,9 +61,9 @@ var Particles = Class.extend({
 
 		for(var i = 0, j = this.particles.geometry.vertices.length; i < j; i++) {
 			var vert = this.particles.geometry.vertices[i];
-			vert.x += (Math.random() * 1) - 0.5;
-			vert.y += Math.random() - 0.5;
-			vert.z += Math.random() * 0.5;
+			vert.x += (Math.random() * 0.5) - 0.25;
+			vert.y += (Math.random() * 0.5) - 0.25;
+			vert.z += Math.random() * 0.25;
 		}
 
 		if(this.life-- <= 0) {

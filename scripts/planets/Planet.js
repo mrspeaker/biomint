@@ -60,14 +60,16 @@ var Planet = Class.extend({
 
 		var inc = 0;
         var freq = 1/18;
-        var  z = Math.random() * 1000;
+        var z = Math.random() * 1000;
 
 		var n = new ClassicalNoise();   
 
 		this.tiles = [];
+		var resources = [];
 		var max = -1000, min = 1000;
 		for(var j = 0; j < this.height; j++){
-			var row = [];
+			var row = [],
+				resRow = [];
 			for(var i = 0; i < this.width; i++){
 				var val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
 				if(val < min) min = val;
@@ -80,14 +82,17 @@ var Planet = Class.extend({
 				}
 
 				if(val > this.colors.length - 1) { val = this.colors.length - 1;}
-
-				
 				var block = new Block(this, [i, j], val);
-
 				row.push(block);
+
+				val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
+				resRow.push(val);
 			}
 			this.tiles.push(row);
+			resources.push(row);
 		}
+
+		
 	
 	},
 
@@ -218,6 +223,9 @@ var Planet = Class.extend({
 			main.planet.populate();
 			main.planet.updateTexture();
 		}).appendTo("#minimap");
+
+
+		// Resourecs
 		
 	},
 

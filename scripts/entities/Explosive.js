@@ -19,6 +19,7 @@ var Explosive = Entity.extend({
 				if(this.state.count === 100) {
 					this.planet.explode(this.pos);
 					ParticleController.create(this.mesh.position.clone());
+					audio.get("explode").backPlay();
 					this.state.change("dead");
 				}
 				break;

@@ -12,17 +12,22 @@ var Level = Class.extend({
 		this.changeTool("explode");
 	},
 	changeTool: function(tool) {
+		audio.get("button2").backPlay();
 		this.tool = tool;
 		$("#status").text(this.tools[tool].help)
 	},
 	useTool: function(xcell, ycell, xpos, ypos) {
+		
+
 		if(this.tool === "search") {
+			audio.get("scout").backPlay();
 			var col = 0xFFFF00;
 			this.planet.add(new Scout(this.planet, new THREE.Vector2(xpos, ypos), col));
 			main.addCash(-130000);
 		}
 
 		if(this.tool === "explode") {
+			audio.get("bomb").backPlay();
 			this.planet.add(new Explosive(this.planet, new THREE.Vector2(xpos, ypos)));	
 			main.addCash(-25600);
 		}
