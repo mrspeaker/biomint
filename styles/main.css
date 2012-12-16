@@ -38,25 +38,25 @@ body {
 }
 
 #gui li[data-tool="none"] div {
-	background: transparent url(../resources/1355653568_hand.png) 4px 4px no-repeat;
+	background: transparent url(../resources/icon-grab.png) 4px 4px no-repeat;
 	width: 20px;
 	height: 20px;
 }
 
 #gui li[data-tool="search"] div {
-	background: transparent url(../resources/1355653562_magnifier_zoom_in.png) 4px 4px no-repeat;
+	background: transparent url(../resources/icon-search.png) 4px 4px no-repeat;
 	width: 20px;
 	height: 20px;
 }
 
 #gui li[data-tool="explode"] div {
-	background: transparent url(../resources/1355653586_bomb.png) 4px 4px no-repeat;
+	background: transparent url(../resources/icon-bomb.png) 4px 4px no-repeat;
 	width: 20px;
 	height: 20px;
 }
 
 #gui li[data-tool="collect"] div {
-	background: transparent url(../resources/1355654099_delivery.png) 4px 4px no-repeat;
+	background: transparent url(../resources/icon-truck.png) 4px 4px no-repeat;
 	width: 20px;
 	height: 20px;
 }
