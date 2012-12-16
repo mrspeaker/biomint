@@ -4,8 +4,8 @@ var main = {
 	planet: null,
 	level: null,
 
-	dollars: 3000000,
-	sharePrice: 0.1,
+	dollars: 0,
+	sharePrice: 1.05,
 	
 	
 	init: function() {
@@ -26,6 +26,7 @@ var main = {
 			$(this).addClass("selected");
 		});
 
+		this.addCash(3500000);
 		this.run();
 	},
 
@@ -45,6 +46,10 @@ var main = {
 		this.planet.tick();
 	},
 
+	addCash: function(amount) {
+		this.dollars += amount;
+		this.setCash();
+	},
 	setCash: function() {
 		$("#cash").text("$" + this.dollars);
 	},

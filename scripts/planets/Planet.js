@@ -35,10 +35,10 @@ var Planet = Class.extend({
 
 		this.entities = [];
 
-		for(var i = 0; i < 20; i++) {
-			var e = new Rover(this, new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0));
-			this.add(e);
-		}
+		// for(var i = 0; i < 20; i++) {
+		// 	var e = new Rover(this, new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0));
+		// 	this.add(e);
+		// }
 
 		// for(var i = -180; i < 180; i += 45) {
 		// 	var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;

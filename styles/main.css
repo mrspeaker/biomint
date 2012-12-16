@@ -13,12 +13,19 @@ body {
 #gui {
 	position: absolute;
 	top: 20px;
-	left: 40%;
+	left: 35%;
+	width: 370px;
 }
 #gui ul {
-	display: inline;
-	margin-left: 0;
-	padding-left: 0;
+
+	width: 120px;
+	height: 24px;
+	
+
+	margin: 0;
+	padding: 0;
+
+	float: left;
 }
 #gui li {
 	background-image: url(../resources/gui.png);
@@ -48,7 +55,7 @@ body {
 	height: 20px;
 }
 
-#gui li[data-tool="mine"] div {
+#gui li[data-tool="collect"] div {
 	background: transparent url(../resources/1355654099_delivery.png) 4px 4px no-repeat;
 	width: 20px;
 	height: 20px;
@@ -68,7 +75,17 @@ body {
 	width: 100px !important;
 }
 
-#cash {
-	float: left;
+.stats {
+	display: inline-block;
+	margin-top: -2px;
+	width: 200px;
 	color: hsl(90, 60%, 50%);
+}
+
+#status {
+	clear: both;
+	margin-top: 7px;
+	display: block;
+	color: hsl(32, 60%, 50%);	
+	vertical-align: center;
 }
