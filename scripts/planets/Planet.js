@@ -38,11 +38,11 @@ var Planet = Class.extend({
 			this.add(e);
 		}
 
-		for(var i = -180; i < 180; i += 45) {
-			var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
-			var e = new Mine(this, new THREE.Vector2(i, 0), col);
-			this.add(e);
-		}
+		// for(var i = -180; i < 180; i += 45) {
+		// 	var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
+		// 	var e = new Mine(this, new THREE.Vector2(i, 0), col);
+		// 	this.add(e);
+		// }
 	},
 
 	add: function(ent) {

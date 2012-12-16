@@ -12,8 +12,13 @@ var Level = Class.extend({
 	useTool: function(xcell, ycell, xpos, ypos) {
 		if(this.tool === "search") {
 			var col = 0xFFFF00;
-			this.planet.add(new Mine(this.planet, new THREE.Vector2(xpos, ypos), col));
+			this.planet.add(new Probe(this.planet, new THREE.Vector2(xpos, ypos), col));
 		}
+
+		if(this.tool === "explode") {
+			this.planet.add(new Explosive(this.planet, new THREE.Vector2(xpos, ypos)));	
+		}
+
 		if(this.tool === "mine") {
 			var current = this.planet.tiles[ycell][xcell];
 			if(current === 1) {

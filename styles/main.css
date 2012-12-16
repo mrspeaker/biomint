@@ -1,0 +1,74 @@
+
+body {
+	background-color: #181111;
+	margin: 0;
+	padding: 0;
+	font-family: monospace;
+	font-size: 8pt;
+}
+
+#board {
+	position: absolute;
+}
+#gui {
+	position: absolute;
+	top: 20px;
+	left: 40%;
+}
+#gui ul {
+	display: inline;
+	margin-left: 0;
+	padding-left: 0;
+}
+#gui li {
+	background-image: url(../resources/gui.png);
+	width: 24px;
+	height: 24px;
+	list-style: none;
+	display: inline-block;
+	margin-left: -3px;
+	padding: 0;
+}
+
+#gui li[data-tool="none"] div {
+	background: transparent url(../resources/1355653568_hand.png) 4px 4px no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+#gui li[data-tool="search"] div {
+	background: transparent url(../resources/1355653562_magnifier_zoom_in.png) 4px 4px no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+#gui li[data-tool="explode"] div {
+	background: transparent url(../resources/1355653586_bomb.png) 4px 4px no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+#gui li[data-tool="mine"] div {
+	background: transparent url(../resources/1355654099_delivery.png) 4px 4px no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+#gui li.selected {
+	background-position: 0 -24px;
+	
+}
+
+#minimap {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#minimap #tex {
+	width: 100px !important;
+}
+
+#cash {
+	float: left;
+	color: hsl(90, 60%, 50%);
+}

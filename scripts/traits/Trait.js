@@ -5,8 +5,8 @@ var Trait = Class.extend({
 
 var TraitMoving = Trait.extend({
 	init_behaviour: function() {
-		this.xspeed = Math.random() - 0.5;
-		this.yspeed = Math.random() - 0.5;
+		this.xspeed = (Math.random() - 0.5) * 0.1;
+		this.yspeed = (Math.random() - 0.5) * 0.1;
 	},
 	tick: function() {
 		this.pos.x += this.xspeed;

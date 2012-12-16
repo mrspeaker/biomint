@@ -22,7 +22,7 @@ var Entity = Class.extend({
 	init_post: function() {
 		for(var i = 0; i < this.behaviours.length; i++) {
 			this.behaviours[i] = new this.behaviours[i]();
-			this.behaviours[i].init_behaviour.call(this);
+			this.behaviours[i].init_behaviour.apply(this, arguments);
 		}
 	},
 	tick: function() {
