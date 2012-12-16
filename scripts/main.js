@@ -3,7 +3,7 @@ var main = {
 	planet: null,
 	level: null,
 
-	dollars: 1000000,
+	dollars: 3000000,
 	
 	
 	init: function() {
@@ -38,6 +38,10 @@ var main = {
 
 	tick: function() {
 		this.planet.tick();
+	},
+
+	setCash: function() {
+		$("#cash").text("$" + this.dollars);
 	},
 
 	render: function() {

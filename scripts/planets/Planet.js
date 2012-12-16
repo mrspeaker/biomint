@@ -34,17 +34,15 @@ var Planet = Class.extend({
 		this.entities = [];
 
 		for(var i = 0; i < 20; i++) {
-			var e = new Rover(this);
-			e.pos = new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0);
+			var e = new Rover(this, new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0));
+			this.add(e);
 		}
 
-		// for(var i = -180; i < 180; i += 45) {
-		// 	var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
-		// 	var e = new Entity(this, col);
-		// 	e.pos = new THREE.Vector2(i, 0);
-		// 	e.xspeed = 0;
-		// 	e.yspeed = 0;
-		// }
+		for(var i = -180; i < 180; i += 45) {
+			var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
+			var e = new Mine(this, new THREE.Vector2(i, 0), col);
+			this.add(e);
+		}
 	},
 
 	add: function(ent) {

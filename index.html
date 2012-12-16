@@ -8,6 +8,8 @@
 				background-color: #181111;
 				margin: 0;
 				padding: 0;
+				font-family: monospace;
+				font-size: 8pt;
 			}
 
 			#board {
@@ -16,7 +18,7 @@
 			#gui {
 				position: absolute;
 				top: 20px;
-				left: 50%;
+				left: 40%;
 			}
 			#gui ul {
 				display: inline;
@@ -33,6 +35,24 @@
 				padding: 0;
 			}
 
+			#gui li[data-tool="none"] div {
+    			background: transparent url(resources/1355653568_hand.png) 4px 4px no-repeat;
+    			width: 20px;
+    			height: 20px;
+			}
+
+			#gui li[data-tool="search"] div {
+    			background: transparent url(resources/1355653562_magnifier_zoom_in.png) 4px 4px no-repeat;
+    			width: 20px;
+    			height: 20px;
+			}
+
+			#gui li[data-tool="mine"] div {
+    			background: transparent url(resources/1355654099_delivery.png) 4px 4px no-repeat;
+    			width: 20px;
+    			height: 20px;
+			}
+
 			#gui li.selected {
 				background-position: 0 -24px;
 				
@@ -46,6 +66,11 @@
 			#minimap #tex {
 				width: 100px !important;
 			}
+
+			#cash {
+				float: left;
+				color: hsl(90, 60%, 50%);
+			}
 		</style>
 	</head>
 	<body>
@@ -53,10 +78,11 @@
 			<div id="game"></div>
 			<div id="gui">
 				<ul>
-					<li data-tool="search" class="selected"></li>
-					<li data-tool="mine"></li>
-					<li data-tool="recall"></li>
+					<li data-tool="none" title="No tool" class="selected"><div></div></li>
+					<li data-tool="search" title="Search for minerals"><div></div></li>
+					<li data-tool="mine" title="Start mining"><div></div></li>
 				</ul>
+				<span id="cash">$10,000,000</span>
 			</div>
 			<div id="minimap"></div>
 		</div>
@@ -70,6 +96,7 @@
 		<script src="scripts/traits/Trait.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/entities/Entity.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/entities/Rover.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/entities/Mine.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/planets/Planet.js" type="text/javascript" charset="utf-8"></script>
 		<script src="scripts/level.js" type="text/javascript" charset="utf-8"></script>
 		

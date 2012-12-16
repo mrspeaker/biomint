@@ -3,7 +3,7 @@ var Level = Class.extend({
 	planet: null,
 	init: function(planet){
 		this.planet = planet;
-		this.changeTool("search");
+		this.changeTool("none");
 	},
 	changeTool: function(tool) {
 		this.tool = tool;
@@ -12,14 +12,16 @@ var Level = Class.extend({
 	useTool: function(xcell, ycell, xpos, ypos) {
 		if(this.tool === "search") {
 			var col = 0xFFFF00;
-			var e = new Entity(this, col);
-			e.pos = new THREE.Vector2(xpos, ypos);
-			e.xspeed = 0;
-			e.yspeed = 0;
+			this.planet.add(new Mine(this.planet, new THREE.Vector2(xpos, ypos), col));
 		}
 		if(this.tool === "mine") {
-			this.planet.tiles[ycell][xcell] = this.planet.tiles[ycell][xcell] === 1 ? 0 : 1;
-			this.planet.updateTexture();
+			var current = this.planet.tiles[ycell][xcell];
+			if(current === 1) {
+				main.dollars += 270000;
+				main.setCash();
+				this.planet.tiles[ycell][xcell] = 0;
+				this.planet.updateTexture();
+			} 
 		}
 	},
 });

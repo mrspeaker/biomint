@@ -1,6 +1,6 @@
 var Rover = Entity.extend({
-	init: function(planet) {
-		this._super(planet);
-		this.has([new TraitMoving()]);
+	init: function(planet, pos, col) {
+		this._super(planet, pos, col);
+		this.has([TraitMesh, TraitMoving]);
 	}
 });
