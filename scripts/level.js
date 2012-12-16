@@ -9,7 +9,7 @@ var Level = Class.extend({
 	planet: null,
 	init: function(planet){
 		this.planet = planet;
-		this.changeTool("explode");
+		this.changeTool("none");
 	},
 	changeTool: function(tool) {
 		audio.get("button2").backPlay();

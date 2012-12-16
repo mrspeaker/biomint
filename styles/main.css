@@ -70,9 +70,13 @@ body {
 	position: absolute;
 	left: 0;
 	top: 0;
+	width: 120px;
 }
-#minimap #tex {
+#minimap canvas {
 	width: 100px !important;
+}
+#minimap #resources {
+	opacity: 0.2;
 }
 
 .stats {

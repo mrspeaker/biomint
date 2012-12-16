@@ -1,11 +1,14 @@
 var Scout = Entity.extend({
 	init: function(planet, pos, col) {
 		this._super(planet, pos);
+		this.planet = planet;
 		this.has([TraitMesh, TraitMoving, TraitState]);
 	},
 	init_post: function() {
 		this._super();
 		this.state.change("born");
+		this.xspeed *= 0.5;
+		this.yspeed *= 0.5;
 	},
 	createMesh: function(opts) {
 		opts = opts || {};
@@ -22,6 +25,8 @@ var Scout = Entity.extend({
 				if(this.state.count === 1000) {
 					this.state.change("dead");
 				}
+
+				this.scan();
 				break;
 			case "dead":
 				if(this.state.count === 0) {
@@ -30,5 +35,14 @@ var Scout = Entity.extend({
 				break;
 		}
 		this._super();
+	},
+	scan: function() {
+		var val = this.planet.getTileFromPos(this.pos, true);
+		val -= 40;
+		val /= 60;
+
+		this.mesh.scale.x = 0.5 + (val * 2);
+		this.mesh.scale.y = 0.5 + (val * 2);
+		
 	}
 });

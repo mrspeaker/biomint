@@ -1,5 +1,7 @@
 var Planet = Class.extend({
 	tiles: [],
+	resources: [],
+
 	colors: [
 		"#265b85", "#d2b394", "#c2a384", "#b2a374", "#a29364", "#928354", "#827344", 
 		"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"], // "#0000FF", "#FF0000", "#0000FF", "#FFFF00"],
@@ -60,13 +62,14 @@ var Planet = Class.extend({
 
 		var inc = 0;
         var freq = 1/18;
+        var resfreq = 1/14;
         var z = Math.random() * 1000;
 
 		var n = new ClassicalNoise();   
 
 		this.tiles = [];
 		var resources = [];
-		var max = -1000, min = 1000;
+		var max = -1000, min = 1000; // Never used  -just for testin bounds!
 		for(var j = 0; j < this.height; j++){
 			var row = [],
 				resRow = [];
@@ -85,14 +88,16 @@ var Planet = Class.extend({
 				var block = new Block(this, [i, j], val);
 				row.push(block);
 
-				val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
+				// Resources
+				val = Math.floor(Math.abs(n.noise(i * resfreq, j * resfreq, z)) * 300);
+				if(val < 40 || val > 100) val = 0;
 				resRow.push(val);
 			}
 			this.tiles.push(row);
-			resources.push(row);
+			resources.push(resRow);
 		}
 
-		
+		this.resources = resources;
 	
 	},
 
@@ -137,6 +142,14 @@ var Planet = Class.extend({
 			}
 			return !ent.remove;
 		});
+
+	},
+
+	getTileFromPos: function(pos, useResourcesNotPlanet) {
+		var map = useResourcesNotPlanet ? this.resources : this.tiles,
+			tilePos = this.latLngToMap(pos);
+
+		return map[tilePos[1]][tilePos[0]];
 
 	},
 
@@ -226,6 +239,15 @@ var Planet = Class.extend({
 
 
 		// Resourecs
+		$canvas = $("<canvas></canvas>", {
+				id: "resources"
+			}),
+			ctx = $canvas[0].getContext("2d");
+
+		ctx.canvas.width = this.width * 10;
+		ctx.canvas.height = this.height * 10;
+
+		$canvas.appendTo("#minimap");
 		
 	},
 
@@ -245,7 +267,17 @@ var Planet = Class.extend({
 		for(var y = 0; y < this.height; y++) {
 			for(var x = 0; x < this.width; x++) {
 				var block = this.tiles[y][x];
+				
 				var type = this.colors[block.height];
+				if(block.unearthed){
+					if(block.mineralValue<10){
+						type = "#444";
+					}
+					else {
+						type = "hsl(350,"+ block.mineralValue + "%, 70%)";
+					}
+				}
+				
 				
 				c.fillStyle = type;
 				c.fillRect(x * w, y * h, w, h);
@@ -261,6 +293,20 @@ var Planet = Class.extend({
 			$("#map").replaceWith(img);
 		}
 		img.src = c.canvas.toDataURL("image/png");
+
+		/// Resourecs
+		var c = $("#resources")[0].getContext("2d"),
+			w = c.canvas.width / this.width | 0,
+			h = c.canvas.height / this.height | 0;
+
+		for(var y = 0; y < this.height; y++) {
+			for(var x = 0; x < this.width; x++) {
+				var block = this.resources[y][x] % 360;
+				
+				c.fillStyle = "hsl(" + block + ", 50%, 50%)";
+				c.fillRect(x * w, y * h, w, h);
+			}
+		}
 
 	},
 
