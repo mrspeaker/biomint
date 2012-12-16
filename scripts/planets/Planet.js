@@ -1,6 +1,8 @@
 var Planet = Class.extend({
 	tiles: [],
-	colors: ["#265b85", "#d2b394"],
+	colors: [
+		"#265b85", "#d2b394", "#c2a384", "#b2a374", "#a29364", "#928354", "#827344", 
+		"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"], // "#0000FF", "#FF0000", "#0000FF", "#FFFF00"],
 	
 	width: 60,
 	height: 60,
@@ -57,17 +59,32 @@ var Planet = Class.extend({
 	populate: function() {
 
 		var inc = 0;
-        var freq = 1/13;
+        var freq = 1/18;
         var  z = Math.random() * 1000;
 
 		var n = new ClassicalNoise();   
 
 		this.tiles = [];
+		var max = -1000, min = 1000;
 		for(var j = 0; j < this.height; j++){
 			var row = [];
 			for(var i = 0; i < this.width; i++){
 				var val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
-				row.push(val > 100 ? 0 : 1);
+				if(val < min) min = val;
+				if(val > max) max = val;
+
+				if(val < 50) {
+					val = 0;
+				} else {
+					val = Math.floor(val / 17);
+				}
+
+				if(val > this.colors.length - 1) { val = this.colors.length - 1;}
+
+				
+				var block = new Block(this, [i, j], val);
+
+				row.push(block);
 			}
 			this.tiles.push(row);
 		}
@@ -118,6 +135,13 @@ var Planet = Class.extend({
 
 	},
 
+	latLngToMap: function(pos) {
+		var xcell = ((pos.x + 180 ) / 360) * this.width | 0,
+			ycell = ((180 - (pos.y + 90)) / 180) * this.height | 0;
+
+		return [xcell, ycell];
+	},
+
 	clicked: function(geo, selected) {
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
@@ -145,6 +169,37 @@ var Planet = Class.extend({
 		}
 		
 	},
+
+	explode: function(pos) {
+		var mapRef = this.latLngToMap(pos),
+			xcell = mapRef[0],
+			ycell = mapRef[1],
+			map = this.tiles,
+			curY = 0,
+			curX = 0;
+
+		for(var j = -2; j < 2; j++) {
+			curY = j + ycell;
+			for(var i = -2; i < 2; i++) {
+				curX = i + xcell;
+				if(map[curY] < 0 || map[curY] > map.length) continue;
+				if(map[curY][curX] < 0 || map[curY][curX] > map[0].length) continue;
+				var damage = 0;
+				if(i == 0 && j == 0) damage = 30;
+				else if(Math.abs(i) == 1 || Math.abs(j) == 1) damage = 15;
+				else damate = 8;
+				map[curY][curX].addDamage(damage);
+			}
+		}
+
+
+		//var block = this.tiles[mapRef[1]][mapRef[0]];
+		
+		//block.addDamage(30);
+		
+		this.updateTexture();
+	},
+
 
 	createCanvas: function() {
 		var $canvas = $("<canvas></canvas>", {
@@ -182,8 +237,8 @@ var Planet = Class.extend({
 
 		for(var y = 0; y < this.height; y++) {
 			for(var x = 0; x < this.width; x++) {
-				var tile = this.tiles[y][x];
-				var type = this.colors[tile];
+				var block = this.tiles[y][x];
+				var type = this.colors[block.height];
 				
 				c.fillStyle = type;
 				c.fillRect(x * w, y * h, w, h);

@@ -3,7 +3,9 @@ var main = {
 	planet: null,
 	level: null,
 
+
 	dollars: 3000000,
+	sharePrice: 0.1,
 	
 	
 	init: function() {

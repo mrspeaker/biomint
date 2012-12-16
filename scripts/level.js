@@ -7,7 +7,6 @@ var Level = Class.extend({
 	},
 	changeTool: function(tool) {
 		this.tool = tool;
-		console.log("Chagnged tool to ", tool)
 	},
 	useTool: function(xcell, ycell, xpos, ypos) {
 		if(this.tool === "search") {

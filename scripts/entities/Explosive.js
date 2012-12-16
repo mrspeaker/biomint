@@ -1,28 +1,28 @@
 var Explosive = Entity.extend({
 	init: function(planet, pos, col) {
 		this._super(planet, pos);
+		this.planet = planet;
 		this.has([TraitMesh, TraitState]);
 	},
 
 	init_post: function() {
-		this._super("born");
+		this._super();
+		this.state.change("born");
 	},
 
 	tick: function() {
 		switch(this.state.current) {
 			case "born":
-				console.log("here we go bomb...");
 				this.state.change("countdown");
 				break;
 			case "countdown":
 				if(this.state.count === 100) {
-					console.log("BOOOOM!");
+					this.planet.explode(this.pos);
 					this.state.change("dead");
 				}
 				break;
 			case "dead":
 				if(this.state.count === 0) {
-					console.log("all overrr");
 					this.remove = true;
 				}
 				break;

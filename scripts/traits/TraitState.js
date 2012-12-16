@@ -9,7 +9,6 @@
 	
 	var TraitState = Trait.extend({
 		init_behaviour: function(state) {
-			console.log("init stateee", state)
 			this.state = {
 				current: "",
 				last: "",
