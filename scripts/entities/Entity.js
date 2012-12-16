@@ -4,6 +4,8 @@ var Entity = Class.extend({
 	altitude: 2.5,
 	behaviours: null,
 
+	remove: false,
+
 	has: function(traits) {
 		var self = this;
 		traits.forEach(function(t){

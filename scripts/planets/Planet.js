@@ -50,6 +50,10 @@ var Planet = Class.extend({
 		this.worldMesh.add(ent.mesh);
 	},
 
+	remove: function(ent) {
+		this.worldMesh.remove(ent.mesh);
+	},
+
 	populate: function() {
 
 		var inc = 0;
@@ -102,7 +106,16 @@ var Planet = Class.extend({
 
 		this.entities.forEach(function(ent){
 			ent.tick();
-		})
+		});
+
+		var self = this;
+		this.entities = this.entities.filter(function(ent){
+			if(ent.remove) {
+				self.remove(ent);
+			}
+			return !ent.remove;
+		});
+
 	},
 
 	clicked: function(geo, selected) {

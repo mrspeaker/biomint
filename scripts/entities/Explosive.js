@@ -11,7 +11,7 @@ var Explosive = Entity.extend({
 	tick: function() {
 		switch(this.state.current) {
 			case "born":
-				console.log("here we go bomb...")
+				console.log("here we go bomb...");
 				this.state.change("countdown");
 				break;
 			case "countdown":
@@ -23,6 +23,7 @@ var Explosive = Entity.extend({
 			case "dead":
 				if(this.state.count === 0) {
 					console.log("all overrr");
+					this.remove = true;
 				}
 				break;
 		}
