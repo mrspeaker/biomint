@@ -20,6 +20,7 @@ var Rover = Entity.extend({
 					this.haul += this.checkPos(this.pos);
 
 					this.mesh.scale.multiplyScalar(2);
+					audio.get("pulse").backPlay();
 					this.state.change("middle");
 				}
 				break;
@@ -41,8 +42,7 @@ var Rover = Entity.extend({
 						}
 					}
 					
-					
-
+					audio.get("pulse").backPlay();
 					this.mesh.scale.multiplyScalar(1.5);
 					this.state.change("outer");
 				}
@@ -68,8 +68,15 @@ var Rover = Entity.extend({
 					}
 
 					var fin = Math.floor(this.haul * 999);
-					main.addCash(fin);
-					main.flashMessage("Expedition haul: $" + fin);
+					if(fin === 0) {
+						main.flashMessage("No minerals here! Only deploy on exposed minerals.");
+					} else {
+						audio.get("win").backPlay();
+						main.addCash(fin);
+						main.flashMessage("Expedition haul: $" + fin);
+					}
+					
+					
 					this.state.change("dead");
 				}
 				break;

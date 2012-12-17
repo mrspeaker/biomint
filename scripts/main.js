@@ -4,6 +4,8 @@ var audiores= [
 	{ name: "bomb", path: "resources/audio/deploy", volume: 0.8, loop: false},
 	{ name: "explode", path: "resources/audio/explode", volume: 0.7, loop: false },
 	{ name: "scout", path: "resources/audio/scout", volume: 0.7, loop: false },
+	{ name: "pulse", path: "resources/audio/pulse", volume: 1, loop: false },
+	{ name: "win", path: "resources/audio/win", volume: 0.7, loop: false },
 	{ name: "drone", path: "resources/audio/drone", volume: 0.2, loop: true }
 ];
 
@@ -103,7 +105,6 @@ var main = {
 	addCash: function(amount) {
 		this.dollars += amount;
 
-		console.log(this.dollars <= 0)
 		if(this.dollars <= 0) {
 			if(!this.bankrupt) {
 

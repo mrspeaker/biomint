@@ -257,8 +257,8 @@ var Planet = Class.extend({
 		this.ctx = ctx;
 
 		$canvas.on("click", function(){
-			// main.planet.populate();
-			// main.planet.updateTexture();
+			main.planet.populate();
+			main.planet.updateTexture();
 		}).appendTo("#minimap");
 
 
@@ -276,7 +276,6 @@ var Planet = Class.extend({
 	},
 
 	updateTexture: function() {
-		//this.populate();
 		var self = this;
 		this.renderTexture(function(tex){
 			self.mesh.material.map = tex
@@ -310,6 +309,37 @@ var Planet = Class.extend({
 				c.fillRect(x * w, y * h, w, h);
 			}
 		}
+
+		function drawPolarCap() {
+			var w = c.canvas.width,
+				s = w / 120;
+
+			c.beginPath();
+			c.moveTo(0, 0);
+			c.lineTo(w, 0);
+			c.lineTo(w, 100);
+
+			for(var i = 120; i > 0; i--) {
+				c.lineTo(i * s, 90 + (Math.random() * 30));
+			}
+			c.lineTo(0, 100);
+			c.lineTo(0, 0);
+			var lingrad = c.createLinearGradient(0,0,0,100);
+	    	lingrad.addColorStop(0, 'rgba(255,255,255,1)');
+	    	lingrad.addColorStop(0.5, 'rgba(255,255,255,1)');
+	    	lingrad.addColorStop(1, 'rgba(255,255,255,0.2)');
+			c.fillStyle = lingrad;
+			c.fill();
+			c.closePath();	
+		}
+		
+		// drawPolarCap();
+		// c.save();
+		// c.translate(0, c.canvas.height);
+		// c.scale(1, -1);
+		// drawPolarCap();
+		// c.restore();
+
 
 		var img = new Image(),
 			self = this;
