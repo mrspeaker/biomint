@@ -22,20 +22,26 @@ var Planet = Class.extend({
 	init: function() {
 		this.createCanvas();
 
-		this.reset();
+		this.populate();
+		var self = this;
+		this.renderTexture(function(tex){
+			self.worldMesh.add(self.createPlanet(tex));
+		});
 	},
 
 	reset: function() {
 
-		var self = this;
+		
 		this.populate();
 		
+		this.updateTexture();
+		
 
-		this.renderTexture(function(tex){
-			self.worldMesh.add(self.createPlanet(tex));
+		var self = this;
+		this.entities = this.entities.filter(function(e){
+			self.remove(e);
+			return false;
 		});
-
-		this.entities = [];
 
 		// for(var i = 0; i < 20; i++) {
 		// 	var e = new Rover(this, new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0));
@@ -62,7 +68,7 @@ var Planet = Class.extend({
 
 		var inc = 0;
         var freq = 1/18;
-        var resfreq = 1/14;
+        var resfreq = 1/8;
         var z = Math.random() * 1000;
 
 		var n = new ClassicalNoise();   
@@ -90,7 +96,7 @@ var Planet = Class.extend({
 
 				// Resources
 				val = Math.floor(Math.abs(n.noise(i * resfreq, j * resfreq, z)) * 300);
-				if(val < 40 || val > 100) val = 0;
+				if(val < 90) val = 0;
 				resRow.push(val);
 			}
 			this.tiles.push(row);
@@ -149,6 +155,10 @@ var Planet = Class.extend({
 		var map = useResourcesNotPlanet ? this.resources : this.tiles,
 			tilePos = this.latLngToMap(pos);
 
+		if(!this.checkMapBounds(tilePos, useResourcesNotPlanet)){
+			return null;
+		}
+
 		return map[tilePos[1]][tilePos[0]];
 
 	},
@@ -159,6 +169,16 @@ var Planet = Class.extend({
 
 		return [xcell, ycell];
 	},
+
+	// mapToLatLng: function(xcell, ycell) {
+	// 	//var xcell = ((pos.x + 180 ) / 360) * this.width,
+	// 	//	  ycell = ((180 - (pos.y + 90)) / 180) * this.height;
+
+	// 	var posx = xcell,
+	// 		posy = ycell 
+
+	// 	return new THREE.Vector2(posx, posy);
+	// },
 
 	clicked: function(geo, selected) {
 		// WWWWW TTTTTT FFFFF?!
@@ -217,6 +237,10 @@ var Planet = Class.extend({
 		this.updateTexture();
 	},
 
+	collectBlock: function(block) {
+		block.collected = true;
+		this.updateTexture();
+	},
 
 	createCanvas: function() {
 		var $canvas = $("<canvas></canvas>", {
@@ -233,8 +257,8 @@ var Planet = Class.extend({
 		this.ctx = ctx;
 
 		$canvas.on("click", function(){
-			main.planet.populate();
-			main.planet.updateTexture();
+			// main.planet.populate();
+			// main.planet.updateTexture();
 		}).appendTo("#minimap");
 
 
@@ -272,6 +296,9 @@ var Planet = Class.extend({
 				if(block.unearthed){
 					if(block.mineralValue<10){
 						type = "#444";
+					} 
+					else if(block.collected) {
+						type = "#666";
 					}
 					else {
 						type = "hsl(350,"+ block.mineralValue + "%, 70%)";
@@ -308,6 +335,16 @@ var Planet = Class.extend({
 			}
 		}
 
+	},
+
+	checkMapBounds: function (tile, useResourcesNotPlanet) {
+		var map = useResourcesNotPlanet ? this.resources : this.tiles;
+
+		if(tile[1] < 0 || tile[1] > map.length - 1 ||
+			tile[0] < 0  || tile[0] > map[0].length - 1) {
+			return false;
+		}
+		return true;
 	},
 
 	createPlanet: function(texture) {

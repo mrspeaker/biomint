@@ -22,7 +22,7 @@ var Scout = Entity.extend({
 				this.state.change("countdown");
 				break;
 			case "countdown":
-				if(this.state.count === 1000) {
+				if(this.state.count === 700) {
 					this.state.change("dead");
 				}
 

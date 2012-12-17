@@ -16,11 +16,12 @@ var main = {
 	dollars: 0,
 	sharePrice: 1.05,
 	
+	bankrupt: false,
 	
 	init: function() {
 		gfx.init();
 		input.init();
-		audio.init(audiores);	
+		audio.init(audiores);
 
 		ParticleController.init();
 
@@ -37,8 +38,23 @@ var main = {
 			$(this).addClass("selected");
 		});
 
-		this.addCash(3500000);
+		this.reset();
+
+		$("#splash").show().delay(2500).fadeOut(2500);
+
+		$("#gameover, #splash").on("mousedown", function(e){
+			e.preventDefault();
+			e.stopPropagation();
+		})
+		
 		this.run();
+	},
+
+	reset: function() {
+		this.bankrupt = false;
+		this.planet.reset();
+		this.dollars = 0;
+		this.addCash(1500000);
 	},
 
 	run: function(){
@@ -50,7 +66,27 @@ var main = {
 		});
 	},
 
+
+	flashMessage: function(msg) {
+		var stat = $("#status");
+		(function flash(count){
+			if(count >= 0){
+				stat.text(count %2 == 0 ? msg : "");
+				setTimeout(function(){
+					flash(--count);
+				}, 400);
+			}
+		}(6));
+
+	},
+
 	tick: function() {
+
+		if(this.bankrupt) {
+			//$("#")
+				
+			return;
+		}
 
 		ParticleController.tick();
 
@@ -66,6 +102,20 @@ var main = {
 
 	addCash: function(amount) {
 		this.dollars += amount;
+
+		console.log(this.dollars <= 0)
+		if(this.dollars <= 0) {
+			if(!this.bankrupt) {
+
+				var self = this;
+				$("#gameover").fadeIn(1500).delay(5500).fadeOut(2500, function(){
+					self.reset();	
+				});	
+			}
+			this.bankrupt = true;
+			return;
+		}
+
 		this.setCash();
 	},
 	setCash: function() {

@@ -7,14 +7,45 @@ body {
 	font-size: 8pt;
 }
 
+#splash, #gameover {
+    position:absolute;
+    top:0; right:0;
+    bottom:0; left:0;
+    background-color: #181010;
+    font-size: 64pt;
+    color: #304017;
+    text-align: center
+}
+#splash > div {
+	margin: 100px auto;
+}
+#splash .title {
+	text-shadow: 0 0 10px #394b17;
+}
+#splash .byline {
+	font-size: 20pt;
+}
+.byline a {
+	color: #283d0a;
+}
+
+#gameover {
+	font-size: 20pt;
+ 	color: #405027	;
+}
+#gameover .midme {
+	margin: 100px auto;
+	width: 500px;
+}
+
 #board {
 	position: absolute;
 }
 #gui {
 	position: absolute;
 	top: 20px;
-	left: 35%;
-	width: 370px;
+	left: 33%;
+	width: 420px;
 }
 #gui ul {
 
@@ -73,10 +104,18 @@ body {
 	width: 120px;
 }
 #minimap canvas {
-	width: 100px !important;
+	width: 110px !important;
+}
+#minimap #tex {
+	margin: 8px;
+	opacity: 0.8;
+	-webkit-box-shadow: 0px 0px 30px rgba(170, 0, 0, 0.75);
+	-moz-box-shadow:    0px 0px 30px rgba(170, 0, 0, 0.75);
+	box-shadow:         0px 0px 30px rgba(170, 0, 0, 0.75);
 }
 #minimap #resources {
 	opacity: 0.2;
+	display:none;
 }
 
 .stats {
@@ -92,4 +131,8 @@ body {
 	display: block;
 	color: hsl(32, 60%, 50%);	
 	vertical-align: center;
+}
+#status .cost {
+	white-space: nowrap;
+	color: hsl(32, 50%, 30%);
 }
