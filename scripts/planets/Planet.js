@@ -68,21 +68,19 @@ var Planet = Class.extend({
 
 		var inc = 0;
         var freq = 1/18;
-        var resfreq = 1/8;
+        var resfreq = 1/10;
         var z = Math.random() * 1000;
 
 		var n = new ClassicalNoise();   
 
 		this.tiles = [];
 		var resources = [];
-		var max = -1000, min = 1000; // Never used  -just for testin bounds!
+		var nonEmptyResources = [];
 		for(var j = 0; j < this.height; j++){
 			var row = [],
 				resRow = [];
 			for(var i = 0; i < this.width; i++){
 				var val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
-				if(val < min) min = val;
-				if(val > max) max = val;
 
 				if(val < 50) {
 					val = 0;
@@ -96,15 +94,25 @@ var Planet = Class.extend({
 
 				// Resources
 				val = Math.floor(Math.abs(n.noise(i * resfreq, j * resfreq, z)) * 300);
-				if(val < 90) val = 0;
+				if(val < 85) val = 0;
+				if(val != 0) nonEmptyResources.push(val);
 				resRow.push(val);
 			}
 			this.tiles.push(row);
 			resources.push(resRow);
 		}
 
-		this.resources = resources;
-	
+		// Normalize resources - 1 to 100
+		var min = Math.min.apply(null, nonEmptyResources),
+			max = Math.max.apply(null, nonEmptyResources),
+			range = max - min;
+		this.resources = resources.map(function(row){
+			return row.map(function(cell){
+				if(cell == 0) return 0;	
+				return Math.floor(((cell - min) / range) * 100);
+			});
+		});
+
 	},
 
 	tick: function() {
@@ -132,10 +140,11 @@ var Planet = Class.extend({
 	    	this.spinning = true;
 	    } else {
 	    	this.spinning = false;
+	    	// World spins on its own
+	    	if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) < 0.005) {
+	    		targetYRotation = this.worldMesh.rotation.y - 0.005;
+	    	}
 	    }
-
-	    this.worldMesh.rotation.y += 0.005;
-
 
 		this.entities.forEach(function(ent){
 			ent.tick();
@@ -216,6 +225,8 @@ var Planet = Class.extend({
 			curY = 0,
 			curX = 0;
 
+		var unearthedEmtpy = 0,
+			unearthedMinerals = 0;
 		for(var j = -2; j <= 2; j++) {
 			curY = j + ycell;
 			for(var i = -2; i <= 2; i++) {
@@ -227,14 +238,32 @@ var Planet = Class.extend({
 				if(i == 0 && j == 0) damage = 30;
 				else if(Math.abs(i) == 1 || Math.abs(j) == 1) damage = 15;
 				else damate = 8;
-				map[curY][curX].addDamage(damage);
+				var block = map[curY][curX],
+					wasUnearthed = block.unearthed;
+
+				block.addDamage(damage);
+
+				if(block.unearthed && !wasUnearthed) {
+					if(block.mineralValue == 0) {
+						unearthedEmtpy++;
+					} else {
+						unearthedMinerals++;
+					}
+				}
 			}
 		}
-		//var block = this.tiles[mapRef[1]][mapRef[0]];
-		
-		//block.addDamage(30);
+		if(unearthedEmtpy > 0 && unearthedMinerals == 0) {
+			this.badDigging();
+		}
 		
 		this.updateTexture();
+	},
+
+	badDigging: function() {
+		var digCost = 10000;
+		main.addCash(-digCost);
+		audio.get("error").backPlay();
+		main.flashMessage("Exploratory drilling failed: share price drops.  <span class='cost'>-$" + digCost + "</span>");
 	},
 
 	collectBlock: function(block) {
@@ -257,8 +286,8 @@ var Planet = Class.extend({
 		this.ctx = ctx;
 
 		$canvas.on("click", function(){
-			main.planet.populate();
-			main.planet.updateTexture();
+			//main.planet.populate();
+			//main.planet.updateTexture();
 		}).appendTo("#minimap");
 
 
@@ -292,16 +321,22 @@ var Planet = Class.extend({
 				var block = this.tiles[y][x];
 				
 				var type = this.colors[block.height];
+
 				if(block.unearthed){
-					if(block.mineralValue<10){
+					if(block.mineralValue < 5){
 						type = "#444";
 					} 
 					else if(block.collected) {
-						type = "#666";
+						type = "#303030";
 					}
 					else {
-						type = "hsl(350,"+ block.mineralValue + "%, 70%)";
+						var lumin = (block.mineralValue * 0.5) + 50 | 0;
+						console.log(lumin);
+						type = "hsl(340,"+ lumin +"%, 70%)";
 					}
+				}
+				if(block.isIce) {
+					type = 	"#eee";
 				}
 				
 				
@@ -333,12 +368,12 @@ var Planet = Class.extend({
 			c.closePath();	
 		}
 		
-		// drawPolarCap();
-		// c.save();
-		// c.translate(0, c.canvas.height);
-		// c.scale(1, -1);
-		// drawPolarCap();
-		// c.restore();
+		drawPolarCap();
+		c.save();
+		c.translate(0, c.canvas.height);
+		c.scale(1, -1);
+		drawPolarCap();
+		c.restore();
 
 
 		var img = new Image(),
@@ -358,9 +393,13 @@ var Planet = Class.extend({
 
 		for(var y = 0; y < this.height; y++) {
 			for(var x = 0; x < this.width; x++) {
-				var block = this.resources[y][x] % 360;
+				var block = this.resources[y][x];
 				
-				c.fillStyle = "hsl(" + block + ", 50%, 50%)";
+				if(block == 0) {
+					c.fillStyle = "rgba(0,0,0,0)";
+				} else {
+					c.fillStyle = "hsl(" + block + ", 80%, 50%)";
+				}
 				c.fillRect(x * w, y * h, w, h);
 			}
 		}

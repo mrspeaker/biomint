@@ -67,8 +67,9 @@ var Rover = Entity.extend({
 						}
 					}
 
-					var fin = Math.floor(this.haul * 999);
+					var fin = Math.floor(this.haul * 9000);
 					if(fin === 0) {
+						audio.get("error").backPlay();
 						main.flashMessage("No minerals here! Only deploy on exposed minerals.");
 					} else {
 						audio.get("win").backPlay();
@@ -96,9 +97,6 @@ var Rover = Entity.extend({
 			block = this.planet.getTileFromPos(pos, false);
 
 		if(block.unearthed && !block.collected) {
-			val -= 40;
-			val /= 60;
-
 			this.planet.collectBlock(block);
 			return val;
 		}
@@ -115,8 +113,6 @@ var Rover = Entity.extend({
 			block = this.planet.tiles[tile[1]][tile[0]];
 
 		if(block.unearthed && !block.collected) {
-			//val -= 40;
-			//val /= 60;
 
 			this.planet.collectBlock(block);
 			return val;

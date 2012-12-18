@@ -5,6 +5,8 @@ var audiores= [
 	{ name: "explode", path: "resources/audio/explode", volume: 0.7, loop: false },
 	{ name: "scout", path: "resources/audio/scout", volume: 0.7, loop: false },
 	{ name: "pulse", path: "resources/audio/pulse", volume: 1, loop: false },
+	{ name: "error", path: "resources/audio/error", volume: 0.8, loop: false },
+	{ name: "heartbeat", path: "resources/audio/heartbeat", volume: 0.3, loop: false },
 	{ name: "win", path: "resources/audio/win", volume: 0.7, loop: false },
 	{ name: "drone", path: "resources/audio/drone", volume: 0.2, loop: true }
 ];
@@ -15,8 +17,11 @@ var main = {
 	level: null,
 	drongo: false,
 
+	initalDollars: 1500000,
 	dollars: 0,
 	sharePrice: 1.05,
+
+	nextHeartbeat: 0,
 	
 	bankrupt: false,
 	
@@ -31,6 +36,8 @@ var main = {
 		this.level = new Level(this.planet);
 
 		gfx.scene.add(this.planet.worldMesh);
+
+		this.setHeartbeat();
 		
 		var self = this;
 		$("#gui").on("click", "li", function(){
@@ -56,7 +63,8 @@ var main = {
 		this.bankrupt = false;
 		this.planet.reset();
 		this.dollars = 0;
-		this.addCash(1500000);
+		this.addCash(this.initalDollars);
+		this.setHeartbeat();
 	},
 
 	run: function(){
@@ -68,12 +76,19 @@ var main = {
 		});
 	},
 
+	setHeartbeat: function() {
+		var time = Math.min(this.dollars, this.initalDollars) / this.initalDollars,
+			next = Math.max(1000, time * 1000 * 10);
+		console.log(next);
+		this.nextHeartbeat = Date.now() + next;
+	},
+
 
 	flashMessage: function(msg) {
 		var stat = $("#status");
 		(function flash(count){
 			if(count >= 0){
-				stat.text(count %2 == 0 ? msg : "");
+				stat.html(count %2 == 0 ? msg : "");
 				setTimeout(function(){
 					flash(--count);
 				}, 400);
@@ -85,8 +100,6 @@ var main = {
 	tick: function() {
 
 		if(this.bankrupt) {
-			//$("#")
-				
 			return;
 		}
 
@@ -97,6 +110,11 @@ var main = {
 				audio.get("drone").backPlay();
 				this.drongo = true;
 			}
+		}
+
+		if(Date.now() > this.nextHeartbeat){
+			audio.get("heartbeat").backPlay();
+			this.setHeartbeat();
 		}
 
 		this.planet.tick();

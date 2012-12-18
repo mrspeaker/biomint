@@ -9,6 +9,7 @@ var Scout = Entity.extend({
 		this.state.change("born");
 		this.xspeed *= 0.5;
 		this.yspeed *= 0.5;
+		this.altitude = 3;
 	},
 	createMesh: function(opts) {
 		opts = opts || {};
@@ -38,11 +39,11 @@ var Scout = Entity.extend({
 	},
 	scan: function() {
 		var val = this.planet.getTileFromPos(this.pos, true);
-		val -= 40;
-		val /= 60;
+		val /= 100;
+		val *= 3;
 
-		this.mesh.scale.x = 0.5 + (val * 2);
-		this.mesh.scale.y = 0.5 + (val * 2);
+		this.mesh.scale.x = 0.5 + val;
+		this.mesh.scale.y = 0.5 + val;
 		
 	}
 });

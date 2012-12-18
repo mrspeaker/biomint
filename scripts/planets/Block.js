@@ -4,6 +4,12 @@ var Block = Class.extend({
 		this.mapRef = mapRef;
 
 		this.isWater = height === 0;
+
+		// if(mapRef[1] < 10 & !this.isWater) {
+		// 	this.height = 0;
+		// 	this.isIce = true;
+		// }
+
 		this.unearthed = false;
 		this.collected = false;
 
