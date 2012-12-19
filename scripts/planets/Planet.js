@@ -146,10 +146,12 @@ var Planet = Class.extend({
 	    	}
 	    }
 
+	    // Update all the entities on the planet
 		this.entities.forEach(function(ent){
 			ent.tick();
 		});
 
+		// Remove anyone who's dead
 		var self = this;
 		this.entities = this.entities.filter(function(ent){
 			if(ent.remove) {
@@ -157,6 +159,13 @@ var Planet = Class.extend({
 			}
 			return !ent.remove;
 		});
+
+		// Make the planet breathe a little
+		var val = 0.02 * Math.abs(Math.sin(Date.now() / 4000));
+		val = 0.98 + val;
+		this.worldMesh.scale.x = val;
+		this.worldMesh.scale.y = val;
+		this.worldMesh.scale.z = val;
 
 	},
 
