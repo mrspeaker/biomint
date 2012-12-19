@@ -75,7 +75,7 @@ body {
 }
 
 #gui li[data-tool="search"] div {
-	background: transparent url(../resources/icon-search.png) 4px 4px no-repeat;
+	background: transparent url(../resources/icon-radar.png) 4px 4px no-repeat;
 	width: 20px;
 	height: 20px;
 }
