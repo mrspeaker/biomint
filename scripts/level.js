@@ -1,10 +1,11 @@
 var Level = Class.extend({
 	tool: "",
 	tools: {
-		"none": { name: "None", help: "Behold the earth, and its unlimited bounty!"},
-		"search": { name: "None", cost: 130000, help: "Deploy scouts to probe for opportunties."},
-		"explode": { name: "None", cost: 25600, help: "Blow up some dirt. Don't be shy! Click click!"},
-		"collect": { name: "None", cost: 270000, help: "Once you've uncovered it, you have to mine it."}
+		"none": { help: "Behold the earth, and its unlimited bounty!"},
+		"search": { cost: 130000, help: "Deploy scouts on the land to probe for opportunties."},
+		"explode": { cost: 25600, help: "Scouts found something? Blow up some dirt! Click click!"},
+		"collect": { cost: 270000, help: "Once you've uncovered it, you have to mine it."},
+		"rig": { cost: 750000, help: "Scout in the deep blue sea: a costly affair."}
 	},
 	planet: null,
 	init: function(planet){
@@ -35,19 +36,29 @@ var Level = Class.extend({
 			main.addCash(-cur.cost);
 		}
 
-		if(this.tool === "collect") {
-			var current = this.planet.tiles[ycell][xcell];
-			if(current === 1) {
-				main.addCash(-cur.cost)
+		// if(this.tool === "collect") {
+		// 	var current = this.planet.tiles[ycell][xcell];
+		// 	if(current === 1) {
+		// 		main.addCash(-cur.cost)
 
-				this.planet.tiles[ycell][xcell] = 0;
-				this.planet.updateTexture();
-			} 
-		}
+		// 		this.planet.tiles[ycell][xcell] = 0;
+		// 		this.planet.updateTexture();
+		// 	} 
+		// }
 
 		if(this.tool === "collect") {
 			audio.get("scout").backPlay();
 			this.planet.add(new Rover(this.planet, new THREE.Vector2(xpos, ypos)));
+			main.addCash(-cur.cost);
+		}
+
+		if(this.tool === "rig") {
+			var current = this.planet.tiles[ycell][xcell];
+			if(current.isWater) {
+				this.planet.add(new Rig(this.planet, new THREE.Vector2(xpos, ypos)));
+			} else {
+				audio.get("error").backPlay();
+			}
 			main.addCash(-cur.cost);
 		}
 	},

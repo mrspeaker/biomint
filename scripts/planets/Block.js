@@ -34,9 +34,12 @@ var Block = Class.extend({
 			amount -= remaining;
 		}
 		if(this.height <= 0) {
-			this.unearthed = true;
-			this.mineralValue = this.planet.resources[this.mapRef[1]][this.mapRef[0]];
+			this.unearth();
 		}
 		
+	},
+	unearth: function() {
+		this.unearthed = true;
+		this.mineralValue = this.planet.resources[this.mapRef[1]][this.mapRef[0]];
 	}
 });

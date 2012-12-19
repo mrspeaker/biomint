@@ -79,7 +79,6 @@ var main = {
 	setHeartbeat: function() {
 		var time = Math.min(this.dollars, this.initalDollars) / this.initalDollars,
 			next = Math.max(1000, time * 1000 * 10);
-		console.log(next);
 		this.nextHeartbeat = Date.now() + next;
 	},
 

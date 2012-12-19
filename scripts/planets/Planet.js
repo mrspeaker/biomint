@@ -331,7 +331,6 @@ var Planet = Class.extend({
 					}
 					else {
 						var lumin = (block.mineralValue * 0.5) + 50 | 0;
-						console.log(lumin);
 						type = "hsl(340,"+ lumin +"%, 70%)";
 					}
 				}

@@ -44,12 +44,12 @@ body {
 #gui {
 	position: absolute;
 	top: 20px;
-	left: 33%;
+	left: 35%;
 	width: 420px;
 }
 #gui ul {
 
-	width: 120px;
+	width: 140px;
 	height: 24px;
 	
 
@@ -88,6 +88,12 @@ body {
 
 #gui li[data-tool="collect"] div {
 	background: transparent url(../resources/icon-truck.png) 4px 4px no-repeat;
+	width: 20px;
+	height: 20px;
+}
+
+#gui li[data-tool="rig"] div {
+	background: transparent url(../resources/icon-rig.png) 2px 2px no-repeat;
 	width: 20px;
 	height: 20px;
 }
