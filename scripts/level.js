@@ -36,16 +36,6 @@ var Level = Class.extend({
 			main.addCash(-cur.cost);
 		}
 
-		// if(this.tool === "collect") {
-		// 	var current = this.planet.tiles[ycell][xcell];
-		// 	if(current === 1) {
-		// 		main.addCash(-cur.cost)
-
-		// 		this.planet.tiles[ycell][xcell] = 0;
-		// 		this.planet.updateTexture();
-		// 	} 
-		// }
-
 		if(this.tool === "collect") {
 			audio.get("scout").backPlay();
 			this.planet.add(new Extractor(this.planet, new THREE.Vector2(xpos, ypos)));
@@ -56,10 +46,11 @@ var Level = Class.extend({
 			var current = this.planet.tiles[ycell][xcell];
 			if(current.isWater) {
 				this.planet.add(new Rig(this.planet, new THREE.Vector2(xpos, ypos)));
+				main.addCash(-cur.cost);
 			} else {
 				audio.get("error").backPlay();
+				main.flashMessage("Rigs can only be deployed in the ocean.")
 			}
-			main.addCash(-cur.cost);
 		}
 	},
 });
