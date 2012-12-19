@@ -81,7 +81,7 @@ var Rig = Entity.extend({
 
 	checkPos: function(pos) {
 		// Mine it... go to next rign
-		var block = this.planet.getTileFromPos(pos, false);
+		var block = this.planet.getBlockFromPos(pos, false);
 
 		if(block.isWater) {
 			block.unearth();

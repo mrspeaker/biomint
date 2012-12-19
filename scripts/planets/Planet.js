@@ -158,15 +158,18 @@ var Planet = Class.extend({
 
 	},
 
-	getTileFromPos: function(pos, useResourcesNotPlanet) {
-		var map = useResourcesNotPlanet ? this.resources : this.tiles,
-			tilePos = this.latLngToMap(pos);
+	getBlockFromPos: function(pos, useResourcesNotPlanet) {
+		var tilePos = this.latLngToMap(pos);
+		return this.getBlockFromTile(tilePos, useResourcesNotPlanet);
+	},
+	getBlockFromTile: function(tile, useResourcesNotPlanet) {
+		var map = useResourcesNotPlanet ? this.resources : this.tiles;
 
-		if(!this.checkMapBounds(tilePos, useResourcesNotPlanet)){
+		if(!this.checkMapBounds(tile, useResourcesNotPlanet)){
 			return null;
 		}
 
-		return map[tilePos[1]][tilePos[0]];
+		return map[tile[1]][tile[0]];
 
 	},
 

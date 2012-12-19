@@ -38,7 +38,7 @@ var Scout = Entity.extend({
 		this._super();
 	},
 	scan: function() {
-		var val = this.planet.getTileFromPos(this.pos, true);
+		var val = this.planet.getBlockFromPos(this.pos, true);
 		val /= 100;
 		val *= 3;
 

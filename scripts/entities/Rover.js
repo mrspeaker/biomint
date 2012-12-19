@@ -17,7 +17,7 @@ var Rover = Entity.extend({
 			case "center":
 				if(this.state.count === 100) {
 					
-					this.haul += this.checkPos(this.pos);
+					this.haul += this.checkHaulInRadius(0);
 
 					this.mesh.scale.multiplyScalar(2);
 					audio.get("pulse").backPlay();
@@ -26,14 +26,9 @@ var Rover = Entity.extend({
 				break;
 			case "middle":
 				if(this.state.count === 100) {
-					var mapRef = this.planet.latLngToMap(this.pos),
-						xcell = mapRef[0],
-						ycell = mapRef[1],
-						self = this;
 
-					utils.neighbours(1, function(x, y){
-						self.haul += self.checkCell([x + xcell, y + ycell]);
-					}, true);
+					this.haul += this.checkHaulInRadius(1);
+					console.log(this.haul);
 					
 					audio.get("pulse").backPlay();
 					this.mesh.scale.multiplyScalar(1.5);
@@ -43,15 +38,11 @@ var Rover = Entity.extend({
 			
 			case "outer":
 				if(this.state.count === 100) {
-					var mapRef = this.planet.latLngToMap(this.pos),
-						xcell = mapRef[0],
-						ycell = mapRef[1],
-						self = this;
 
-					utils.neighbours(2, function(x, y){
-						self.haul += self.checkCell([x + xcell, y + ycell]);
-					}, true);
-
+					this.haul += this.checkHaulInRadius(2);
+					console.log(this.haul);
+					
+					// FIXME: move to planet/level
 					var fin = Math.floor(this.haul * 9000);
 					if(fin === 0) {
 						audio.get("error").backPlay();
@@ -61,7 +52,6 @@ var Rover = Entity.extend({
 						main.addCash(fin);
 						main.flashMessage("Expedition haul: $" + fin);
 					}
-					
 					
 					this.state.change("dead");
 				}
@@ -76,29 +66,25 @@ var Rover = Entity.extend({
 		this._super();
 	},
 
-	checkPos: function(pos) {
-		// Mine it... go to next rign
-		var val = this.planet.getTileFromPos(pos, true),
-			block = this.planet.getTileFromPos(pos, false);
+	checkHaulInRadius: function(radius) {
+		var mapRef = this.planet.latLngToMap(this.pos),
+			xcell = mapRef[0],
+			ycell = mapRef[1],
+			haul = 0,
+			self = this;
 
-		if(block.unearthed && !block.collected) {
-			this.planet.collectBlock(block);
-			return val;
-		}
-		return 0;
+		utils.neighbours(radius, function(x, y){
+			haul += self.checkHaulAtTile([x + xcell, y + ycell]);
+		}, true);
+
+		return haul;
 	},
-	// Copypasta from above...
-	checkCell: function(tile) {
-		// Mine it... go to next rign
-		if(!this.planet.checkMapBounds(tile)) {
-			return 0;
-		}
 
-		var val = this.planet.resources[tile[1]][tile[0]],
-			block = this.planet.tiles[tile[1]][tile[0]];
+	checkHaulAtTile: function(tile) {
+		var val = this.planet.getBlockFromTile(tile, true);
+			block = this.planet.getBlockFromTile(tile);
 
 		if(block.unearthed && !block.collected) {
-
 			this.planet.collectBlock(block);
 			return val;
 		}
