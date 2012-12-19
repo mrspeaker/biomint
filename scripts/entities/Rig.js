@@ -8,6 +8,7 @@ var Rig = Entity.extend({
 		this._super();
 		this.state.change("born");
 	},
+
 	tick: function() {
 		switch(this.state.current) {
 			case "born":
@@ -24,7 +25,7 @@ var Rig = Entity.extend({
 				}
 				break;
 			case "middle":
-				if(this.state.count === 100) {
+				if(this.state.count === 200) {
 					var mapRef = this.planet.latLngToMap(this.pos),
 						xcell = mapRef[0],
 						ycell = mapRef[1],
@@ -49,7 +50,7 @@ var Rig = Entity.extend({
 				break;
 			
 			case "outer":
-				if(this.state.count === 100) {
+				if(this.state.count === 200) {
 					// Copy pasta form above
 					var mapRef = this.planet.latLngToMap(this.pos),
 						xcell = mapRef[0],

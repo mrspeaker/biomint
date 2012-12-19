@@ -6,8 +6,8 @@ var Planet = Class.extend({
 		"#265b85", "#d2b394", "#c2a384", "#b2a374", "#a29364", "#928354", "#827344", 
 		"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"], // "#0000FF", "#FF0000", "#0000FF", "#FFFF00"],
 	
-	width: 60,
-	height: 60,
+	width: 100,
+	height: 100,
 
 	segments: 50,
 	rings: 50,
@@ -277,8 +277,8 @@ var Planet = Class.extend({
 			}),
 			ctx = $canvas[0].getContext("2d");
 
-		ctx.canvas.width = this.width * 10;
-		ctx.canvas.height = this.height * 10;
+		ctx.canvas.width = this.width * 5;
+		ctx.canvas.height = this.height * 5;
 
 		ctx.canvas.webkitImageSmoothingEnabled = false;
 		ctx.canvas.imageSmoothingEnabled = false;
@@ -297,8 +297,8 @@ var Planet = Class.extend({
 			}),
 			ctx = $canvas[0].getContext("2d");
 
-		ctx.canvas.width = this.width * 10;
-		ctx.canvas.height = this.height * 10;
+		ctx.canvas.width = this.width * 5;
+		ctx.canvas.height = this.height * 5;
 
 		$canvas.appendTo("#minimap");
 		
@@ -346,19 +346,20 @@ var Planet = Class.extend({
 
 		function drawPolarCap() {
 			var w = c.canvas.width,
-				s = w / 120;
+				steps = w / 120,
+				h = 100;
 
 			c.beginPath();
 			c.moveTo(0, 0);
 			c.lineTo(w, 0);
-			c.lineTo(w, 100);
+			c.lineTo(w, h);
 
 			for(var i = 120; i > 0; i--) {
-				c.lineTo(i * s, 90 + (Math.random() * 30));
+				c.lineTo(i * steps, (h - 10) + (Math.random() * (h / 3)));
 			}
-			c.lineTo(0, 100);
+			c.lineTo(0, h);
 			c.lineTo(0, 0);
-			var lingrad = c.createLinearGradient(0,0,0,100);
+			var lingrad = c.createLinearGradient(0,0,0,h);
 	    	lingrad.addColorStop(0, 'rgba(255,255,255,1)');
 	    	lingrad.addColorStop(0.5, 'rgba(255,255,255,1)');
 	    	lingrad.addColorStop(1, 'rgba(255,255,255,0.2)');
