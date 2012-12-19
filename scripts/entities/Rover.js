@@ -29,18 +29,11 @@ var Rover = Entity.extend({
 					var mapRef = this.planet.latLngToMap(this.pos),
 						xcell = mapRef[0],
 						ycell = mapRef[1],
-						curY = 0,
-						curX = 0,
-						val = 0;
+						self = this;
 
-					for(var j = -1; j <= 1; j++) {
-						curY = j + ycell;
-						for(var i = -1; i <= 1; i++) {
-							curX = i + xcell;
-							
-							this.haul += this.checkCell([curX, curY]);
-						}
-					}
+					utils.neighbours(1, function(x, y){
+						self.haul += self.checkCell([x + xcell, y + ycell]);
+					}, true);
 					
 					audio.get("pulse").backPlay();
 					this.mesh.scale.multiplyScalar(1.5);
@@ -50,22 +43,14 @@ var Rover = Entity.extend({
 			
 			case "outer":
 				if(this.state.count === 100) {
-					// Copy pasta form above
 					var mapRef = this.planet.latLngToMap(this.pos),
 						xcell = mapRef[0],
 						ycell = mapRef[1],
-						curY = 0,
-						curX = 0,
-						val = 0;
+						self = this;
 
-					for(var j = -2; j <= 2; j++) {
-						curY = j + ycell;
-						for(var i = -2; i <= 2; i++) {
-							curX = i + xcell;
-							
-							this.haul += this.checkCell([curX, curY]);
-						}
-					}
+					utils.neighbours(2, function(x, y){
+						self.haul += self.checkCell([x + xcell, y + ycell]);
+					}, true);
 
 					var fin = Math.floor(this.haul * 9000);
 					if(fin === 0) {

@@ -29,17 +29,11 @@ var Rig = Entity.extend({
 					var mapRef = this.planet.latLngToMap(this.pos),
 						xcell = mapRef[0],
 						ycell = mapRef[1],
-						curY = 0,
-						curX = 0;
+						self = this;
 
-					for(var j = -2; j <= 2; j++) {
-						curY = j + ycell;
-						for(var i = -2; i <= 2; i++) {
-							curX = i + xcell;
-							
-							this.checkCell([curX, curY]);
-						}
-					}
+					utils.neighbours(2, function(x, y){
+						self.checkCell([x + xcell, y + ycell]);
+					});
 					
 					audio.get("pulse").backPlay();
 					this.mesh.scale.multiplyScalar(1.5);
@@ -55,17 +49,11 @@ var Rig = Entity.extend({
 					var mapRef = this.planet.latLngToMap(this.pos),
 						xcell = mapRef[0],
 						ycell = mapRef[1],
-						curY = 0,
-						curX = 0
+						self = this;
 
-					for(var j = -4; j <= 4; j++) {
-						curY = j + ycell;
-						for(var i = -4; i <= 4; i++) {
-							curX = i + xcell;
-							
-							this.checkCell([curX, curY]);
-						}
-					}
+					utils.neighbours(4, function(x, y){
+						self.checkCell([x + xcell, y + ycell]);
+					});
 
 					// var fin = Math.floor(this.haul * 9000);
 					// if(fin === 0) {

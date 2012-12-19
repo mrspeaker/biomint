@@ -36,23 +36,12 @@ var Planet = Class.extend({
 		
 		this.updateTexture();
 		
-
 		var self = this;
 		this.entities = this.entities.filter(function(e){
 			self.remove(e);
 			return false;
 		});
 
-		// for(var i = 0; i < 20; i++) {
-		// 	var e = new Rover(this, new THREE.Vector2(Math.random() * 360 - 180 | 0, Math.random() * 180 - 90 | 0));
-		// 	this.add(e);
-		// }
-
-		// for(var i = -180; i < 180; i += 45) {
-		// 	var col = i === -180 ? 0xFF0000 : i === 0 ? 0xFFFFFF : 0x555555;
-		// 	var e = new Mine(this, new THREE.Vector2(i, 0), col);
-		// 	this.add(e);
-		// }
 	},
 
 	add: function(ent) {
@@ -231,36 +220,35 @@ var Planet = Class.extend({
 			xcell = mapRef[0],
 			ycell = mapRef[1],
 			map = this.tiles,
-			curY = 0,
-			curX = 0;
+			self = this;
 
 		var unearthedEmtpy = 0,
 			unearthedMinerals = 0;
-		for(var j = -2; j <= 2; j++) {
-			curY = j + ycell;
-			for(var i = -2; i <= 2; i++) {
-				curX = i + xcell;
-				if(curY < 0 || curY > map.length - 1) continue;
-				if(curX < 0 || curX > map[0].length - 1) continue;
 
-				var damage = 0;
-				if(i == 0 && j == 0) damage = 30;
-				else if(Math.abs(i) == 1 || Math.abs(j) == 1) damage = 15;
-				else damate = 8;
-				var block = map[curY][curX],
-					wasUnearthed = block.unearthed;
+		utils.neighbours(2, function(x, y){
+			if(!self.checkMapBounds([x + xcell, y + ycell])){
+				return;
+			}
+			
+			var damage = 0;
+			if(x == 0 && y == 0) damage = 30;
+			else if(Math.abs(x) < 2 && Math.abs(y) < 2) damage = 15;
+			else damage = 8;
 
-				block.addDamage(damage);
+			var block = map[y + ycell][x + xcell],
+				wasUnearthed = block.unearthed;
 
-				if(block.unearthed && !wasUnearthed) {
-					if(block.mineralValue == 0) {
-						unearthedEmtpy++;
-					} else {
-						unearthedMinerals++;
-					}
+			block.addDamage(damage);
+
+			if(block.unearthed && !wasUnearthed) {
+				if(block.mineralValue == 0) {
+					unearthedEmtpy++;
+				} else {
+					unearthedMinerals++;
 				}
 			}
-		}
+		});
+		
 		if(unearthedEmtpy > 0 && unearthedMinerals == 0) {
 			this.badDigging();
 		}
