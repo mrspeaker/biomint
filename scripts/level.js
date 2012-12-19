@@ -48,7 +48,7 @@ var Level = Class.extend({
 
 		if(this.tool === "collect") {
 			audio.get("scout").backPlay();
-			this.planet.add(new Rover(this.planet, new THREE.Vector2(xpos, ypos)));
+			this.planet.add(new Extractor(this.planet, new THREE.Vector2(xpos, ypos)));
 			main.addCash(-cur.cost);
 		}
 

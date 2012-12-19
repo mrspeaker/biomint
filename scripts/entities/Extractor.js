@@ -1,4 +1,4 @@
-var Rover = Entity.extend({
+var Extractor = Entity.extend({
 	init: function(planet, pos) {
 		this._super(planet, pos);
 		this.planet = planet;
