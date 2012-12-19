@@ -18,7 +18,7 @@ var Rover = Entity.extend({
 				if(this.state.count === 100) {
 					
 					this.haul += this.checkHaulInRadius(0);
-
+					
 					this.mesh.scale.multiplyScalar(2);
 					audio.get("pulse").backPlay();
 					this.state.change("middle");
@@ -28,7 +28,6 @@ var Rover = Entity.extend({
 				if(this.state.count === 100) {
 
 					this.haul += this.checkHaulInRadius(1);
-					console.log(this.haul);
 					
 					audio.get("pulse").backPlay();
 					this.mesh.scale.multiplyScalar(1.5);
@@ -40,7 +39,6 @@ var Rover = Entity.extend({
 				if(this.state.count === 100) {
 
 					this.haul += this.checkHaulInRadius(2);
-					console.log(this.haul);
 					
 					// FIXME: move to planet/level
 					var fin = Math.floor(this.haul * 9000);

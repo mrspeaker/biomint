@@ -1,5 +1,4 @@
 var Entity = Class.extend({
-	
 	pos: null,
 	altitude: 2.5,
 	behaviours: null,
@@ -13,7 +12,6 @@ var Entity = Class.extend({
 		});
 	},
 	init: function(planet, pos, color){
-
 		this.radius = planet.radius;
 		this.color = color || Math.random() * 0xffffff;
 

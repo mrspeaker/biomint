@@ -17,7 +17,7 @@ var Rig = Entity.extend({
 			case "center":
 				if(this.state.count === 100) {
 					
-					this.checkPos(this.pos);
+					this.unearthRadius(0);
 
 					this.mesh.scale.multiplyScalar(2);
 					audio.get("pulse").backPlay();
@@ -26,14 +26,8 @@ var Rig = Entity.extend({
 				break;
 			case "middle":
 				if(this.state.count === 200) {
-					var mapRef = this.planet.latLngToMap(this.pos),
-						xcell = mapRef[0],
-						ycell = mapRef[1],
-						self = this;
-
-					utils.neighbours(2, function(x, y){
-						self.checkCell([x + xcell, y + ycell]);
-					});
+					
+					this.unearthRadius(2);
 					
 					audio.get("pulse").backPlay();
 					this.mesh.scale.multiplyScalar(1.5);
@@ -45,26 +39,9 @@ var Rig = Entity.extend({
 			
 			case "outer":
 				if(this.state.count === 200) {
-					// Copy pasta form above
-					var mapRef = this.planet.latLngToMap(this.pos),
-						xcell = mapRef[0],
-						ycell = mapRef[1],
-						self = this;
 
-					utils.neighbours(4, function(x, y){
-						self.checkCell([x + xcell, y + ycell]);
-					});
+					this.unearthRadius(4);
 
-					// var fin = Math.floor(this.haul * 9000);
-					// if(fin === 0) {
-					// 	audio.get("error").backPlay();
-					// 	main.flashMessage("No minerals here! Only deploy on exposed minerals.");
-					// } else {
-					// 	audio.get("win").backPlay();
-					// 	main.addCash(fin);
-					// 	main.flashMessage("Expedition haul: $" + fin);
-					// }
-					
 					this.planet.updateTexture();
 					this.state.change("dead");
 				}
@@ -79,26 +56,20 @@ var Rig = Entity.extend({
 		this._super();
 	},
 
-	checkPos: function(pos) {
-		// Mine it... go to next rign
-		var block = this.planet.getBlockFromPos(pos, false);
+	unearthRadius: function(radius) {
+		var mapRef = this.planet.latLngToMap(this.pos),
+			xcell = mapRef[0],
+			ycell = mapRef[1],
+			self = this;
 
-		if(block.isWater) {
-			block.unearth();
-		}
-	},
-	// Copypasta from above...
-	checkCell: function(tile) {
-		// Mine it... go to next rign
-		if(!this.planet.checkMapBounds(tile)) {
-			return 0;
-		}
+		utils.neighbours(radius, function(x, y){
+			var tile = [x + xcell, y + ycell],
+				block = self.planet.getBlockFromTile(tile);
 
-		var block = this.planet.tiles[tile[1]][tile[0]];
-
-		if(block.isWater) {
-			block.unearth();
-		}
+			if(block.isWater) {
+				block.unearth();
+			}
+		});
 	},
 
 	createMesh: function(opts) {
