@@ -22,7 +22,15 @@ var main = {
 	sharePrice: 1.05,
 
 	nextHeartbeat: 0,
-	
+
+	zooming: {
+		go: false,
+		start: 90000,
+		finish: 350,
+		length: 5500,
+		startTime: Date.now()
+	},
+
 	bankrupt: false,
 	
 	init: function() {
@@ -37,6 +45,8 @@ var main = {
 
 		gfx.scene.add(this.planet.worldMesh);
 
+		gfx.camera.position.z = this.zooming.start;
+
 		this.setHeartbeat();
 		
 		var self = this;
@@ -49,7 +59,9 @@ var main = {
 
 		this.reset();
 
-		$("#splash").show().delay(2500).fadeOut(2500);
+		$("#splash").show().delay(2500).fadeIn(1, function(){
+			self.zooming.go = true;
+		}).fadeOut(2500);
 
 		$("#gameover, #splash").on("mousedown", function(e){
 			e.preventDefault();
@@ -114,6 +126,27 @@ var main = {
 		if(Date.now() > this.nextHeartbeat){
 			audio.get("heartbeat").backPlay();
 			this.setHeartbeat();
+		}
+
+		function smoothstep (a, b, v) {
+			var x = Math.max(0, Math.min((v-a)/(b-a), 1));
+			return x * x * (3 - 2 * x);
+		}
+
+		if(this.zooming.go) {
+
+			var v = Date.now() - this.zooming.startTime;
+			//v = SMOOTHSTEP(v);
+			var p = smoothstep(0, this.zooming.length, v);
+			  //X = (A * v) + (B * (1 - v));
+
+			var p = 1 - (1 - p) * (1 - p) * (1 - p) * (1 - p);
+			//(A * v) + (B * (1 - v));
+			gfx.camera.position.z = (1-p) * this.zooming.start + this.zooming.finish * p;
+
+			if(p >= 1) {
+				this.zooming.go = false;
+			}
 		}
 
 		this.planet.tick();
