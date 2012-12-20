@@ -103,6 +103,13 @@ body {
 	
 }
 
+#linky {
+	position: absolute;
+	top: 126px;
+	left: 28px;
+	color: #304017;
+}
+
 #minimap {
 	position: absolute;
 	left: 0;
