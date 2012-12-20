@@ -26,6 +26,12 @@ var Planet = Class.extend({
 		var self = this;
 		this.renderTexture(function(tex){
 			self.worldMesh.add(self.createPlanet(tex));
+
+			// var len = self.mesh.geometry.vertices.length;
+			// for(var i = 0; i < len; i++ ) {
+			// 	self.mesh.geometry.vertices[i].y += (Math.random() * 10 | 0) - 50;
+			// }
+			// self.mesh.geometry.verticesNeedUpdate = true;
 		});
 	},
 
@@ -34,7 +40,10 @@ var Planet = Class.extend({
 		
 		this.populate();
 		
+
 		this.updateTexture();
+		
+		this.resetPlanetGeometry();
 		
 		var self = this;
 		this.entities = this.entities.filter(function(e){
@@ -190,7 +199,18 @@ var Planet = Class.extend({
 	// 	return new THREE.Vector2(posx, posy);
 	// },
 
+	sinkEarth: function(meshFace) {
+		var am = 1 - (Math.random() * 0.01);
+		this.mesh.geometry.vertices[meshFace.a].multiplyScalar(am);
+		this.mesh.geometry.vertices[meshFace.b].multiplyScalar(am);
+		this.mesh.geometry.vertices[meshFace.c].multiplyScalar(am);
+		this.mesh.geometry.vertices[meshFace.d].multiplyScalar(am);
+		
+		this.mesh.geometry.verticesNeedUpdate = true;
+	},
+
 	clicked: function(geo, selected) {
+
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
 		var inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
@@ -212,13 +232,13 @@ var Planet = Class.extend({
 			this._downOn = [xcell, ycell];
 		} else {
 			if(xcell === this._downOn[0] && ycell === this._downOn[1]) {
-				main.level.useTool(xcell, ycell, pos.x, pos.y);
+				main.level.useTool(xcell, ycell, pos.x, pos.y, geo.face);
 			}
 		}
 		
 	},
 
-	explode: function(pos) {
+	explode: function(pos, face) {
 		var mapRef = this.latLngToMap(pos),
 			xcell = mapRef[0],
 			ycell = mapRef[1],
@@ -227,6 +247,8 @@ var Planet = Class.extend({
 
 		var unearthedEmtpy = 0,
 			unearthedMinerals = 0;
+
+		this.sinkEarth(face);
 
 		utils.neighbours(2, function(x, y){
 			if(!self.checkMapBounds([x + xcell, y + ycell])){
@@ -416,6 +438,19 @@ var Planet = Class.extend({
 		return true;
 	},
 
+	resetPlanetGeometry: function() {
+		if(!this.mesh) return;
+
+		var sphere = new THREE.SphereGeometry(
+		    	this.radius,
+		    	this.segments,
+		    	this.rings);
+		for(var i = 0; i < sphere.vertices.length; i++) {
+			this.mesh.geometry.vertices[i] = sphere.vertices[i].clone();	
+		}
+		this.mesh.geometry.verticesNeedUpdate = true;
+	},
+
 	createPlanet: function(texture) {
 		var sphereMaterial = new THREE.MeshLambertMaterial({
 	          color: 0xd4be92,
@@ -475,6 +510,7 @@ var Planet = Class.extend({
     	sphere.receiveShadow = true;
 
 		this.mesh = sphere;
+
 		return sphere;
 	}
 });

@@ -20,7 +20,7 @@ var Level = Class.extend({
 		if(cur.cost) msg += " <span class='cost'>-$" + cur.cost + "</span>";
 		$("#status").html(msg);
 	},
-	useTool: function(xcell, ycell, xpos, ypos) {
+	useTool: function(xcell, ycell, xpos, ypos, face) {
 		var cur = this.tools[this.tool];
 	
 		if(this.tool === "search") {
@@ -32,7 +32,7 @@ var Level = Class.extend({
 
 		if(this.tool === "explode") {
 			audio.get("bomb").backPlay();
-			this.planet.add(new Explosive(this.planet, new THREE.Vector2(xpos, ypos)));	
+			this.planet.add(new Explosive(this.planet, new THREE.Vector2(xpos, ypos), face));	
 			main.addCash(-cur.cost);
 		}
 
