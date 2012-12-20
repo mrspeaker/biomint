@@ -6,8 +6,8 @@ var Planet = Class.extend({
 		"#265b85", "#d2b394", "#c2a384", "#b2a374", "#a29364", "#928354", "#827344", 
 		"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"], // "#0000FF", "#FF0000", "#0000FF", "#FFFF00"],
 	
-	width: 100,
-	height: 100,
+	width: 80,
+	height: 80,
 
 	segments: 50,
 	rings: 50,
@@ -19,11 +19,17 @@ var Planet = Class.extend({
 
 	entities: [],
 
+	polarCapPath: [],
+
 	init: function() {
 		this.createCanvas();
+		this.makePolarCap();
 
 		this.populate();
+
 		var self = this;
+
+		
 		this.renderTexture(function(tex){
 			self.worldMesh.add(self.createPlanet(tex));
 
@@ -33,6 +39,32 @@ var Planet = Class.extend({
 			// }
 			// self.mesh.geometry.verticesNeedUpdate = true;
 		});
+	},
+
+	makePolarCap: function() {
+		var path = [];
+			w = this.ctx.canvas.width,
+			h = 80;
+			steps = w / 120,
+
+			path.push([0, 0]);
+			path.push([w, 0]);
+			path.push([w, h]);
+			
+			for(var i = 120; i > 0; i--) {
+				path.push([i * steps, (h - 10) + (Math.random() * (h / 3))]);
+			}
+			path.push([0, h]);
+			path.push([0,0]);
+
+		this.polarCapPath = path;
+
+		// Set the gradient
+		var lingrad = this.ctx.createLinearGradient(0,0,0,h);
+		lingrad.addColorStop(0, 'rgba(255,255,255,1)');
+		lingrad.addColorStop(0.5, 'rgba(255,255,255,1)');
+		lingrad.addColorStop(1, 'rgba(255,255,255,0.2)');
+		this.polarCapGradient = lingrad;
 	},
 
 	reset: function() {
@@ -336,7 +368,8 @@ var Planet = Class.extend({
 	renderTexture: function(cb) {
 		var c = this.ctx,
 			w = c.canvas.width / this.width | 0,
-			h = c.canvas.height / this.height | 0;
+			h = c.canvas.height / this.height | 0,
+			self = this;
 
 		for(var y = 0; y < this.height; y++) {
 			for(var x = 0; x < this.width; x++) {
@@ -367,25 +400,14 @@ var Planet = Class.extend({
 		}
 
 		function drawPolarCap() {
-			var w = c.canvas.width,
-				steps = w / 120,
-				h = 100;
-
 			c.beginPath();
-			c.moveTo(0, 0);
-			c.lineTo(w, 0);
-			c.lineTo(w, h);
-
-			for(var i = 120; i > 0; i--) {
-				c.lineTo(i * steps, (h - 10) + (Math.random() * (h / 3)));
+			var p = self.polarCapPath[0];
+			c.moveTo(p[0], p[1]);
+			for(var i = 1, j = self.polarCapPath.length; i < j; i++) {
+				p = self.polarCapPath[i];
+				c.lineTo(p[0], p[1]);
 			}
-			c.lineTo(0, h);
-			c.lineTo(0, 0);
-			var lingrad = c.createLinearGradient(0,0,0,h);
-	    	lingrad.addColorStop(0, 'rgba(255,255,255,1)');
-	    	lingrad.addColorStop(0.5, 'rgba(255,255,255,1)');
-	    	lingrad.addColorStop(1, 'rgba(255,255,255,0.2)');
-			c.fillStyle = lingrad;
+			c.fillStyle = self.polarCapGradient;
 			c.fill();
 			c.closePath();	
 		}
