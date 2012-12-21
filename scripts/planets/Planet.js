@@ -241,13 +241,14 @@ var Planet = Class.extend({
 	// },
 
 	sinkEarth: function(geo) {
-		console.log(geo);
-
 		var ring = Math.floor((geo.faceIndex / this.rings) * (this.width/this.rings)), 
 			segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
-		
-		console.log(ring, segment)
+		if(segment == 0 || segment == this.width) {
+			// Edge piece - don't sink
+			return;
+		}
 		var am = 1 - (Math.random() * 0.02);
+		
 		//this.mesh.geometry.vertices[geo.face.a].multiplyScalar(am);
 		this.mesh.geometry.vertices[geo.face.b].multiplyScalar(am);
 		this.mesh.geometry.vertices[geo.face.c].multiplyScalar(am);
