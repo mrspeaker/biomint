@@ -82,7 +82,7 @@ var Extractor = Entity.extend({
 		var val = this.planet.getBlockFromTile(tile, true);
 			block = this.planet.getBlockFromTile(tile);
 
-		if(block.unearthed && !block.collected) {
+		if(block && block.unearthed && !block.collected) {
 			this.planet.collectBlock(block);
 			return val;
 		}

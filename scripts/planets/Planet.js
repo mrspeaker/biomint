@@ -4,7 +4,7 @@ var Planet = Class.extend({
 
 	colors: [
 		"#265b85", "#d2b394", "#c2a384", "#b2a374", "#a29364", "#928354", "#827344", 
-		"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"], // "#0000FF", "#FF0000", "#0000FF", "#FFFF00"],
+		"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"],
 	
 	width: 80,
 	height: 80,
@@ -28,8 +28,6 @@ var Planet = Class.extend({
 		this.populate();
 
 		var self = this;
-
-		
 		this.renderTexture(function(tex){
 			self.worldMesh.add(self.createPlanet(tex));
 
@@ -199,6 +197,16 @@ var Planet = Class.extend({
 
 	},
 
+	checkMapBounds: function (tile, useResourcesNotPlanet) {
+		var map = useResourcesNotPlanet ? this.resources : this.tiles;
+
+		if(tile[1] < 0 || tile[1] > map.length - 1 ||
+			tile[0] < 0  || tile[0] > map[0].length - 1) {
+			return false;
+		}
+		return true;
+	},
+
 	getBlockFromPos: function(pos, useResourcesNotPlanet) {
 		var tilePos = this.latLngToMap(pos);
 		return this.getBlockFromTile(tilePos, useResourcesNotPlanet);
@@ -206,10 +214,13 @@ var Planet = Class.extend({
 	getBlockFromTile: function(tile, useResourcesNotPlanet) {
 		var map = useResourcesNotPlanet ? this.resources : this.tiles;
 
-		if(!this.checkMapBounds(tile, useResourcesNotPlanet)){
-			return null;
-		}
-
+		// if(!this.checkMapBounds(tile, useResourcesNotPlanet)){
+		// 	return null;
+		// }
+		if(tile[0] < 0) tile[0] = this.width + tile[0];
+		tile[0] = tile[0] % this.width;
+		if(tile[1] < 0) tile[1] = this.height + tile[1];
+		tile[1] = tile[1] % this.height;
 		return map[tile[1]][tile[0]];
 
 	},
@@ -263,7 +274,7 @@ var Planet = Class.extend({
 		if(!selected) {
 			this._downOn = [xcell, ycell];
 		} else {
-			if(xcell === this._downOn[0] && ycell === this._downOn[1]) {
+			if(this._downOn && xcell === this._downOn[0] && ycell === this._downOn[1]) {
 				main.level.useTool(xcell, ycell, pos.x, pos.y, geo.face);
 			}
 		}
@@ -282,18 +293,15 @@ var Planet = Class.extend({
 
 		this.sinkEarth(face);
 
-		utils.neighbours(2, function(x, y){
-			if(!self.checkMapBounds([x + xcell, y + ycell])){
-				return;
-			}
-			
+		utils.neighbours(2, function(x, y){			
 			var damage = 0;
 			if(x == 0 && y == 0) damage = 30;
 			else if(Math.abs(x) < 2 && Math.abs(y) < 2) damage = 15;
 			else damage = 8;
 
-			var block = map[y + ycell][x + xcell],
-				wasUnearthed = block.unearthed;
+			var block = self.getBlockFromTile([x + xcell, y + ycell]);
+			if(!block) return
+			var wasUnearthed = block.unearthed;
 
 			block.addDamage(damage);
 
@@ -448,16 +456,6 @@ var Planet = Class.extend({
 			}
 		}
 
-	},
-
-	checkMapBounds: function (tile, useResourcesNotPlanet) {
-		var map = useResourcesNotPlanet ? this.resources : this.tiles;
-
-		if(tile[1] < 0 || tile[1] > map.length - 1 ||
-			tile[0] < 0  || tile[0] > map[0].length - 1) {
-			return false;
-		}
-		return true;
 	},
 
 	resetPlanetGeometry: function() {

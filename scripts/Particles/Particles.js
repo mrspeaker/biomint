@@ -31,27 +31,29 @@ var Particles = Class.extend({
 		var colors = [],
 			geometry = new THREE.Geometry();
 
-		for ( i = 0; i < 100; i ++ ) {
-
+		for (i = 0; i < 100; i++) {
 			var vertex = new THREE.Vector3();
 			vertex.x = this.pos.x;
-			vertex.y = this.pos.y;// + (Math.random() - 0.5);
-			vertex.z = this.pos.z;// + (22 * Math.random() - 1);
+			vertex.y = this.pos.y;
+			vertex.z = this.pos.z;
 
 			geometry.vertices.push( vertex );
 
-			colors[ i ] = new THREE.Color( 0xffffff );
-			colors[ i ].setHSV( i / 600, 1, 1 );
-
+			colors[ i ] = new THREE.Color(0xffffff);
+			colors[ i ].setHSV(i / 600, 1, 1);
 		}
 
 		geometry.colors = colors;
 
-		var material = new THREE.ParticleBasicMaterial( { size: 3, vertexColors: true, blending: THREE.AdditiveBlending,
-    transparent: true } );
-		material.color.setHSV( 1.0, 0.2, 0.8 );
+		var material = new THREE.ParticleBasicMaterial({
+			size: 3,
+			vertexColors: true,
+			blending: THREE.AdditiveBlending,
+    		transparent: true
+    	});
+		material.color.setHSV(1.0, 0.2, 0.8);
 
-		var particles = new THREE.ParticleSystem( geometry, material );
+		var particles = new THREE.ParticleSystem(geometry, material);
 		particles.sortParticles = true;
 
 		this.particles = particles;

@@ -66,7 +66,7 @@ var Rig = Entity.extend({
 			var tile = [x + xcell, y + ycell],
 				block = self.planet.getBlockFromTile(tile);
 
-			if(block.isWater) {
+			if(block && block.isWater) {
 				block.unearth();
 			}
 		});
@@ -76,6 +76,6 @@ var Rig = Entity.extend({
 		opts = opts || {};
 		this.mesh = new THREE.Mesh(
 		  new THREE.SphereGeometry(opts.size || 4, 3, 3),
-		  new THREE.MeshLambertMaterial({color: 0x00ffff }));
+		  new THREE.MeshLambertMaterial({color: 0x00ffff}));
 	}
 });

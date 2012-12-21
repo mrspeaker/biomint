@@ -4,7 +4,7 @@ var gfx = {
 	art: {},
 	init: function() {
 		// set the scene size
-		this.WIDTH = window.innerWidth - 10,
+		this.WIDTH = window.innerWidth - 10;
 		this.HEIGHT = window.innerHeight - 10;
 
 		// set some camera attributes
@@ -13,9 +13,8 @@ var gfx = {
 			NEAR = 0.1,
 			FAR = 10000;
 
-		// create a WebGL renderer, camera
-		// and a scene
-		this.renderer = new THREE.WebGLRenderer({ clearColor: 0x181111, clearAlpha: 1});
+		// create a WebGL renderer, camera, and scene
+		this.renderer = new THREE.WebGLRenderer({clearColor: 0x181111, clearAlpha: 1});
 		this.scene = new THREE.Scene();
 		this.sceneAtmosphere = new THREE.Scene();
 		this.projector = new THREE.Projector();
@@ -88,9 +87,9 @@ var gfx = {
         var phi =  lat * (Math.PI / 180),
         	theta = (lon - 180) * (Math.PI / 180);
  
-        var x = -(radius+height) * Math.cos(phi) * Math.cos(theta);
-        var y = (radius+height) * Math.sin(phi);
-        var z = (radius+height) * Math.cos(phi) * Math.sin(theta);
+        var x = -(radius + height) * Math.cos(phi) * Math.cos(theta);
+        var y = (radius + height) * Math.sin(phi);
+        var z = (radius + height) * Math.cos(phi) * Math.sin(theta);
  
         return new THREE.Vector3(x,y,z);
     },
@@ -123,60 +122,59 @@ var gfx = {
     	this.renderer.render(this.sceneAtmosphere, this.camera); 
 	},
 	addStars: function() {
-		// stars
+		var radius = 70,
+			starsGeometry = [
+				new THREE.Geometry(), 
+				new THREE.Geometry()];
 
-		var radius = 70, i, r = radius, starsGeometry = [ new THREE.Geometry(), new THREE.Geometry() ];
-
-		for ( i = 0; i < 250; i ++ ) {
-
+		for(var i = 0; i < 250; i ++) {
 			var vertex = new THREE.Vector3();
 			vertex.x = Math.random() * 2 - 1;
 			vertex.y = Math.random() * 2 - 1;
 			vertex.z = Math.random() * 2 - 1;
-			vertex.multiplyScalar( r );
+			vertex.multiplyScalar(radius);
 
-			starsGeometry[ 0 ].vertices.push( vertex );
+			starsGeometry[0].vertices.push(vertex);
 
 		}
 
-		for ( i = 0; i < 1500; i ++ ) {
-
+		for(i = 0; i < 1500; i ++) {
 			var vertex = new THREE.Vector3();
 			vertex.x = Math.random() * 2 - 1;
 			vertex.y = Math.random() * 2 - 1;
 			vertex.z = Math.random() * 2 - 1;
-			vertex.multiplyScalar( r );
+			vertex.multiplyScalar(radius);
 
-			starsGeometry[ 1 ].vertices.push( vertex );
+			starsGeometry[1].vertices.push(vertex);
 
 		}
 
-		var stars;
-		var starsMaterials = [
-			new THREE.ParticleBasicMaterial( { color: 0x555555, size: 2, sizeAttenuation: false } ),
-			new THREE.ParticleBasicMaterial( { color: 0x555555, size: 1, sizeAttenuation: false } ),
-			new THREE.ParticleBasicMaterial( { color: 0x333333, size: 2, sizeAttenuation: false } ),
-			new THREE.ParticleBasicMaterial( { color: 0x3a3a3a, size: 1, sizeAttenuation: false } ),
-			new THREE.ParticleBasicMaterial( { color: 0x1a1a1a, size: 2, sizeAttenuation: false } ),
-			new THREE.ParticleBasicMaterial( { color: 0x1a1a1a, size: 1, sizeAttenuation: false } )
-		];
+		var stars,
+			starsMaterials = [
+				new THREE.ParticleBasicMaterial({ color: 0x555555, size: 2, sizeAttenuation: false }),
+				new THREE.ParticleBasicMaterial({ color: 0x555555, size: 1, sizeAttenuation: false }),
+				new THREE.ParticleBasicMaterial({ color: 0x333333, size: 2, sizeAttenuation: false }),
+				new THREE.ParticleBasicMaterial({ color: 0x3a3a3a, size: 1, sizeAttenuation: false }),
+				new THREE.ParticleBasicMaterial({ color: 0x1a1a1a, size: 2, sizeAttenuation: false }),
+				new THREE.ParticleBasicMaterial({ color: 0x1a1a1a, size: 1, sizeAttenuation: false })
+			];
 
-		for ( i = 10; i < 30; i ++ ) {
-
-			stars = new THREE.ParticleSystem( starsGeometry[ i % 2 ], starsMaterials[ i % 6 ] );
+		for (i = 10; i < 30; i ++) {
+			stars = new THREE.ParticleSystem(
+				starsGeometry[i % starsGeometry.length],
+				starsMaterials[i % starsMaterials.length]);
 
 			stars.rotation.x = Math.random() * 6;
 			stars.rotation.y = Math.random() * 6;
 			stars.rotation.z = Math.random() * 6;
 
-			s = i * 10;
+			var s = i * 10;
 			stars.scale.set( s, s, s );
 
 			stars.matrixAutoUpdate = false;
 			stars.updateMatrix();
 
 			this.scene.add( stars );
-
 		}
 
 	},
