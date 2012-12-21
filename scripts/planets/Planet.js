@@ -67,10 +67,8 @@ var Planet = Class.extend({
 
 	reset: function() {
 
-		
 		this.populate();
 		
-
 		this.updateTexture();
 		
 		this.resetPlanetGeometry();
@@ -242,12 +240,18 @@ var Planet = Class.extend({
 	// 	return new THREE.Vector2(posx, posy);
 	// },
 
-	sinkEarth: function(meshFace) {
-		var am = 1 - (Math.random() * 0.01);
-		this.mesh.geometry.vertices[meshFace.a].multiplyScalar(am);
-		this.mesh.geometry.vertices[meshFace.b].multiplyScalar(am);
-		this.mesh.geometry.vertices[meshFace.c].multiplyScalar(am);
-		this.mesh.geometry.vertices[meshFace.d].multiplyScalar(am);
+	sinkEarth: function(geo) {
+		console.log(geo);
+
+		var ring = Math.floor((geo.faceIndex / this.rings) * (this.width/this.rings)), 
+			segment = Math.floor((geo.faceIndex % this.segments) * (this.width/this.segments));
+		
+		console.log(ring, segment)
+		var am = 1 - (Math.random() * 0.02);
+		//this.mesh.geometry.vertices[geo.face.a].multiplyScalar(am);
+		this.mesh.geometry.vertices[geo.face.b].multiplyScalar(am);
+		this.mesh.geometry.vertices[geo.face.c].multiplyScalar(am);
+		//this.mesh.geometry.vertices[geo.face.d].multiplyScalar(am);
 		
 		this.mesh.geometry.verticesNeedUpdate = true;
 	},
@@ -275,13 +279,13 @@ var Planet = Class.extend({
 			this._downOn = [xcell, ycell];
 		} else {
 			if(this._downOn && xcell === this._downOn[0] && ycell === this._downOn[1]) {
-				main.level.useTool(xcell, ycell, pos.x, pos.y, geo.face);
+				main.level.useTool(xcell, ycell, pos.x, pos.y, geo);
 			}
 		}
 		
 	},
 
-	explode: function(pos, face) {
+	explode: function(pos, geo) {
 		var mapRef = this.latLngToMap(pos),
 			xcell = mapRef[0],
 			ycell = mapRef[1],
@@ -291,7 +295,7 @@ var Planet = Class.extend({
 		var unearthedEmtpy = 0,
 			unearthedMinerals = 0;
 
-		this.sinkEarth(face);
+		this.sinkEarth(geo);
 
 		utils.neighbours(2, function(x, y){			
 			var damage = 0;

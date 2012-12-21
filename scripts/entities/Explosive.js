@@ -1,6 +1,6 @@
 var Explosive = Entity.extend({
-	init: function(planet, pos, face) {
-		this.face = face;
+	init: function(planet, pos, geo) {
+		this.geo = geo;
 		this._super(planet, pos);
 		this.planet = planet;
 		this.has([TraitMesh, TraitState]);
@@ -18,7 +18,7 @@ var Explosive = Entity.extend({
 				break;
 			case "countdown":
 				if(this.state.count === 100) {
-					this.planet.explode(this.pos, this.face);
+					this.planet.explode(this.pos, this.geo);
 					ParticleController.create(this.mesh.position.clone());
 					audio.get("explode").backPlay();
 					this.state.change("dead");
