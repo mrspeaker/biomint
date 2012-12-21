@@ -50,12 +50,13 @@ var main = {
 		this.setHeartbeat();
 		
 		var self = this;
-		$("#gui").on("click", "li", function(){
+		$("#gui").on("click", "li", function(e){
+			e.stopPropagation();
 			var tool = $(this).data("tool");
 			self.level.changeTool(tool);
 			$("#gui li").removeClass("selected");
 			$(this).addClass("selected");
-		});
+		}).on("mouseup", function(e){ e.stopPropagation(); });
 
 		this.reset();
 
