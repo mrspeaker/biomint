@@ -1,5 +1,6 @@
 var Rig = Entity.extend({
-	init: function(planet, pos) {
+	init: function(planet, pos, geo) {
+		this.geo = geo;
 		this._super(planet, pos);
 		this.planet = planet;
 		this.has([TraitMesh, TraitState]);
@@ -18,6 +19,7 @@ var Rig = Entity.extend({
 				if(this.state.count === 100) {
 					
 					this.unearthRadius(0);
+					this.planet.sinkEarth(this.geo);
 
 					this.mesh.scale.multiplyScalar(2);
 					audio.get("pulse").backPlay();

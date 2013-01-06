@@ -25,8 +25,7 @@ var Level = Class.extend({
 	
 		if(this.tool === "search") {
 			audio.get("scout").backPlay();
-			var col = 0xFFFF00;
-			this.planet.add(new Scout(this.planet, new THREE.Vector2(xpos, ypos), col));
+			this.planet.add(new Scout(this.planet, new THREE.Vector2(xpos, ypos), geo));
 			main.addCash(-cur.cost);
 		}
 
@@ -45,7 +44,7 @@ var Level = Class.extend({
 		if(this.tool === "rig") {
 			var current = this.planet.tiles[ycell][xcell];
 			if(current.isWater) {
-				this.planet.add(new Rig(this.planet, new THREE.Vector2(xpos, ypos)));
+				this.planet.add(new Rig(this.planet, new THREE.Vector2(xpos, ypos), geo));
 				main.addCash(-cur.cost);
 			} else {
 				audio.get("error").backPlay();
