@@ -4,7 +4,7 @@
 2. XXXXX Add event handlers
 3. XXXXX Generate landscapes
 
-4. Add mining mechanic
+4. XXXXX Add mining mechanic
 
 5. XXXXX Test on 3d
 5b. XXXXX Draw texture to canvas and wrap!
@@ -13,8 +13,7 @@
 
 6. XXXX Add entities
 
-7. Generate minerals (perlin?)
-8. Add collect mechaninc
+7. XXXXX Generate minerals (perlin?)
+8. XXXXX Add collect mechaninc
 9. Add "cities"
 10. Expand cities
-11. Add lobby mechanic

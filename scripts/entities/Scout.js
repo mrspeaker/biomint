@@ -7,10 +7,15 @@ var Scout = Entity.extend({
 	},
 	init_post: function() {
 		this._super();
+		this.aimScout();
 		this.state.change("born");
 		this.xspeed *= 0.5;
 		this.yspeed *= 0.5;
 		this.altitude = 3;
+	},
+	aimScout: function() {
+		this.mesh.lookAt(new THREE.Vector3(0,0,0));
+		//this.mesh.rotation.x += 90 * (Math.PI / 180);
 	},
 	createMesh: function(opts) {
 		opts = opts || {};
@@ -20,22 +25,20 @@ var Scout = Entity.extend({
 		  //new THREE.SphereGeometry(opts.size || 2, 5, 5),
 		  //g.topRad, g.botRad, g.height, g.radSegs, g.heightSegs
 		  //new THREE.CylinderGeometry(0, size * 2, 200, 5, 5 ),
-		  new THREE.CubeGeometry(3, 3 , 1+200/8,1,1,1),
+		  new THREE.CubeGeometry(3, 3, 10 , 1, 1, 1),
+		  //new THREE.PlaneGeometry(1000, 1000, 5, 5),
 		  //new THREE.TetrahedronGeometry(15, 0),
-		  //new THREE.MeshLambertMaterial({color: 0x00ff00 })
-		  new THREE.MeshBasicMaterial( { color: 0xffff00})
+		  new THREE.MeshLambertMaterial({color: 0x00eeee })
+		  //new THREE.MeshBasicMaterial( { color: 0xffff00})
 		);	
 
 		//this.mesh.rotation.x = 90;//Math.random() * 200 - 100;
 		
-		//this.mesh.up = new THREE.Vector3(0, 0, 1);
-		//this.mesh.lookAt(new THREE.Vector3(0,0,0));
-		this.mesh.lookAt(this.geo.face.normal);
+		//this.mesh.lookAt(this.geo.face.normal);
 		
 		//this.mesh.rotation = this.geo.face.normal.clone();
 		console.log(this.mesh);//.rotateY(90);
 		//this.mesh.rotation.x += 90 * Math.PI / 180;
-		//this.mesh.rotation.y += 90 * Math.PI / 180;
 
 	},
 	tick: function() {
@@ -49,6 +52,7 @@ var Scout = Entity.extend({
 				}
 
 				this.scan();
+				this.aimScout();
 				break;
 			case "dead":
 				if(this.state.count === 0) {
