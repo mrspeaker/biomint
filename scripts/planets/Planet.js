@@ -171,6 +171,7 @@ var Planet = Class.extend({
 	    		targetYRotation = this.worldMesh.rotation.y - 0.005;
 	    	}
 	    }
+	    
 
 	    // Update all the entities on the planet
 		this.entities.forEach(function(ent){
@@ -530,9 +531,9 @@ var Planet = Class.extend({
 	    mesh.scale.x = mesh.scale.y = mesh.scale.z = 1.2;
 	   	gfx.sceneAtmosphere.add(mesh);
 			
-
-    	sphere.castShadow = true;
-    	sphere.receiveShadow = true;
+	   	// Remove shadows - get weird cycling FPS 60-40-60-40...
+    	//sphere.castShadow = true;
+    	//sphere.receiveShadow = true;
 
 		this.mesh = sphere;
 
