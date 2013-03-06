@@ -16,7 +16,6 @@ var Extractor = Entity.extend({
 
 		lookAwayFrom(this.mesh, this.planet.worldMesh);
     	//this.mesh.lookAwayFrom(this.planet.worldMesh);
-		this.haul = 10000;
 
 	},
 	tick: function() {
