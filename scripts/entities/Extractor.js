@@ -8,6 +8,16 @@ var Extractor = Entity.extend({
 		this._super();
 		this.state.change("born");
 		this.haul = 0;
+
+		function lookAwayFrom(me, target) {
+			var origin = new THREE.Vector3().subVectors(me.position, target.position);
+			me.lookAt(new THREE.Vector3().addVectors(me.position, origin));
+		}
+
+		lookAwayFrom(this.mesh, this.planet.worldMesh);
+    	//this.mesh.lookAwayFrom(this.planet.worldMesh);
+		this.haul = 10000;
+
 	},
 	tick: function() {
 		switch(this.state.current) {
@@ -91,8 +101,9 @@ var Extractor = Entity.extend({
 
 	createMesh: function(opts) {
 		opts = opts || {};
-		this.mesh = new THREE.Mesh(
-		  new THREE.SphereGeometry(opts.size || 3, 5, 5),
-		  new THREE.MeshLambertMaterial({color: 0x0000ff }));
+		this.mesh = main.models.extractor.clone();
+		// this.mesh = new THREE.Mesh(
+		//   new THREE.SphereGeometry(opts.size || 3, 5, 5),
+		//   new THREE.MeshLambertMaterial({color: 0x0000ff }));
 	}
 });

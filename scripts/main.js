@@ -17,6 +17,8 @@ var main = {
 	level: null,
 	drongo: false,
 
+	models: {},
+
 	initalDollars: 1500000,
 	dollars: 0,
 	sharePrice: 1.05,
@@ -48,6 +50,11 @@ var main = {
 		gfx.camera.position.z = this.zooming.start;
 
 		this.setHeartbeat();
+
+		var loader = new THREE.ColladaLoader();
+		loader.load( './resources/mine.dae', function colladaReady( collada ) {
+			main.models.extractor = collada.scene;
+		} );
 		
 		var self = this;
 		$("#gui").on("click", "li", function(e){
