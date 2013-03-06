@@ -262,7 +262,7 @@ var Planet = Class.extend({
 		// WWWWW TTTTTT FFFFF?!
 		// I AM A GODDDDD!
 		var inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
-		var rotatedPoint = inv.multiplyVector3(geo.point);
+		var rotatedPoint = geo.point.applyProjection(inv); //inv.multiplyVector3(geo.point);
 		var pos = gfx.vec3ToLatLong(rotatedPoint, this.radius);
 
 		// Old way: from geo.face.
@@ -505,7 +505,7 @@ var Planet = Class.extend({
                   fragmentShader: [
                       "varying vec3 vNormal;",
                       "void main() {",
-                          "float intensity = pow( 0.95 - dot( vNormal, vec3( 0.0, 0.0, 0.2 ) ), 10.0 );",
+                          "float intensity = pow( 0.8 - dot( vNormal, vec3( 0.0, 0.0, 0.2 ) ), 10.0 );",
                           "gl_FragColor = vec4( 0.3, 0.1, 0.1, 0.3 ) * intensity;",
 
                       "}"

@@ -31,8 +31,10 @@ var input = {
 
 		var vector = new THREE.Vector3((e.clientX / gfx.WIDTH) * 2 - 1, - (e.clientY / gfx.HEIGHT) * 2 + 1, 0.5);
 		gfx.projector.unprojectVector(vector, gfx.camera);
-		var ray = new THREE.Ray(gfx.camera.position, vector.subSelf(gfx.camera.position).normalize()),
+
+		var ray = new THREE.Raycaster(gfx.camera.position, vector.sub(gfx.camera.position).normalize()),
 			intersects = ray.intersectObjects([main.planet.mesh]);
+
 
 		if(!intersects.length) {
 			return;
@@ -49,7 +51,7 @@ var input = {
 
 		var vector = new THREE.Vector3((e.clientX / gfx.WIDTH) * 2 - 1, - (e.clientY / gfx.HEIGHT) * 2 + 1, 0.5);
 		gfx.projector.unprojectVector(vector, gfx.camera);
-		var ray = new THREE.Ray(gfx.camera.position, vector.subSelf(gfx.camera.position).normalize()),
+		var ray = new THREE.Raycaster(gfx.camera.position, vector.sub(gfx.camera.position).normalize()),
 			intersects = ray.intersectObjects([main.planet.mesh]);//worldMesh.children);
 
 		if(!intersects.length) {

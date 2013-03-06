@@ -10,6 +10,6 @@ You now know where you should blow up the earth - don't be stingy with the explo
 
 Once you have unearthed some treasure, deploy a mine (careful, it's a bit pricy all this digging) to retrieve the goods and earn your coin while tilling the earth bare! 
 
-Entry is: http://www.ludumdare.com/compo/ludum-dare-25/?action=preview&uid=9199
-Code is: a mess, in Three.js
-I'm: @mrspeaker
+Entry is: http://www.ludumdare.com/compo/ludum-dare-25/?action=preview&uid=9199.
+Code is: a mess, in Three.js.
+I'm: @mrspeaker.
