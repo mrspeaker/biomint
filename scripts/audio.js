@@ -1,51 +1,59 @@
-(function(){
+(function () {
+
+	"use strict";
+
 	var audio = {
 		snd: {},
-		get: function(name){
+		get: function (name) {
 			return this.snd[name];
 		},
-		init: function(sounds, cb) {
+		init: function (sounds, cb) {
 			var toLoad = sounds.length,
-			    self = this,
-			    ext = document.createElement('audio').canPlayType('audio/mpeg;') === "" ? ".ogg" : ".mp3";
-			
+				self = this,
+				ext = document.createElement('audio').canPlayType('audio/mpeg;') === "" ? ".ogg" : ".mp3";
+
 			// Todo: put a timeout incase something doesn't load.
-			sounds.forEach(function(asset) {
-			    var audio = new Audio();
-			    
-			    audio.src = asset.path + ext;
-			    audio.volume = asset.volume;
-			    audio.loop = asset.loop;
-			    audio.addEventListener("canplaythrough",function(){
-			    	audio.loaded = true;
-			        if(!(--toLoad)) {
-			            cb && cb();
-			        };
-			    });
-			    audio.load();
-			    // Adding to prototype doesn't work in Ejecta
-			    audio.backPlay = function() {
-					if(!this.loaded) return;
+			sounds.forEach(function (asset) {
+				var audio = new window.Audio();
+
+				audio.src = asset.path + ext;
+				audio.volume = asset.volume;
+				audio.loop = asset.loop;
+				audio.addEventListener("canplaythrough", function () {
+					audio.loaded = true;
+					if (!(--toLoad)) {
+						cb && cb();
+					}
+				});
+				audio.load();
+				// Adding to prototype doesn't work in Ejecta
+				audio.backPlay = function () {
+					if (!this.loaded) {
+						return;
+					}
 					this.end();
 					this.play();
 				};
-				audio.end = function(){
-					if(!this.loaded) return;
+				audio.end = function () {
+					if (!this.loaded) {
+						return;
+					}
 					this.pause();
 					this.currentTime = 0;
 				};
-			    self.snd[asset.name] = audio;
+				self.snd[asset.name] = audio;
 			});
 		},
-		play: function(name) {
+		play: function (name) {
 
 		},
-		stop: function(name) {
+		stop: function (name) {
 
 		},
-		stopAll: function() {
-			var self = this;
-			for(var x in self.snd){
+		stopAll: function () {
+			var self = this,
+				x;
+			for (x in self.snd) {
 				self.get(x).end();
 			}
 		}
