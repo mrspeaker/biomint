@@ -8,5 +8,10 @@ var utils = {
 				cb && cb(i, j);
 			}
 		}
+	},
+	lookAwayFrom: function(me, target) {
+		var v = new THREE.Vector3();
+		v.subVectors(me.position, target.position).add(me.position);
+		me.lookAt(v);
 	}
 }

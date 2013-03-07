@@ -7,16 +7,10 @@ var Extractor = Entity.extend({
 	init_post: function() {
 		this._super();
 		this.state.change("born");
+		this.altitude = 0;
 		this.haul = 0;
 
-		function lookAwayFrom(me, target) {
-			var origin = new THREE.Vector3().subVectors(me.position, target.position);
-			me.lookAt(new THREE.Vector3().addVectors(me.position, origin));
-		}
-
-		lookAwayFrom(this.mesh, this.planet.worldMesh);
-    	//this.mesh.lookAwayFrom(this.planet.worldMesh);
-
+		utils.lookAwayFrom(this.mesh, this.planet.worldMesh);
 	},
 	tick: function() {
 		switch(this.state.current) {

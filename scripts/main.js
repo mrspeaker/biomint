@@ -52,9 +52,13 @@ var main = {
 		this.setHeartbeat();
 
 		var loader = new THREE.ColladaLoader();
-		loader.load( './resources/mine.dae', function colladaReady( collada ) {
+		loader.load( './resources/scout.dae', function colladaReady( collada ) {
+			main.models.scout = collada.scene;
+		});
+		var loader2 = new THREE.ColladaLoader();
+		loader2.load( './resources/mine.dae', function colladaReady( collada ) {
 			main.models.extractor = collada.scene;
-		} );
+		});
 		
 		var self = this;
 		$("#gui").on("click", "li", function(e){

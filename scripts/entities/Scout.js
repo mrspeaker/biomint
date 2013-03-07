@@ -11,7 +11,8 @@ var Scout = Entity.extend({
 		this.state.change("born");
 		this.xspeed *= 0.5;
 		this.yspeed *= 0.5;
-		this.altitude = 3;
+		this.altitude = 5;
+		this.mesh.scale.set(3,3,3);
 	},
 	aimScout: function() {
 		this.mesh.lookAt(new THREE.Vector3(0,0,0));
@@ -20,6 +21,12 @@ var Scout = Entity.extend({
 	createMesh: function(opts) {
 		opts = opts || {};
 		var size = opts.size || 2;
+
+		this.mesh = main.models.scout.clone();
+		this.mesh.children[0].material = new THREE.MeshLambertMaterial();
+
+		console.log(this.mesh)
+		return;
 		this.mesh = new THREE.Mesh(
 		  
 		  //new THREE.SphereGeometry(opts.size || 2, 5, 5),
@@ -64,11 +71,16 @@ var Scout = Entity.extend({
 	},
 	scan: function() {
 		var val = this.planet.getBlockFromPos(this.pos, true);
-		val /= 100;
-		val *= 3;
+		var maxColor = 120; // green
+		var color = ((100 - val) / 100) * maxColor;
+		console.log(color);
+		this.mesh.children[0].material.color = new THREE.Color().setHSL(color/360, 0.75, 0.50) ;
+		
+		//val /= 100;
+		//val *= 300;
 
-		this.mesh.scale.x = 0.5 + val;
-		this.mesh.scale.y = 0.5 + val;
+		//this.mesh.scale.x = 0.5 + val;
+		//this.mesh.scale.y = 0.5 + val;
 		
 	}
 });

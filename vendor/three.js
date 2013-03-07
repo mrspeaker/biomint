@@ -6726,8 +6726,12 @@ THREE.Object3D.prototype = {
     },
 
     lookAwayFrom: function(vector) {
-        var origin = new THREE.Vector3().subVectors(this.position, vector.position);
-        this.lookAt(new THREE.Vector3().addVectors(this.position, origin));
+        
+        var v = new THREE.Vector3();
+        
+        v.subVectors(this.position, vector.position).add(this.position);
+        
+        this.lookAt(v);
     },
 
     lookAt: function(vector) {

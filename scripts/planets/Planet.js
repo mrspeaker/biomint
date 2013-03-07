@@ -132,12 +132,17 @@ var Planet = Class.extend({
 		var min = Math.min.apply(null, nonEmptyResources),
 			max = Math.max.apply(null, nonEmptyResources),
 			range = max - min;
+
+		var o = {};
 		this.resources = resources.map(function(row){
 			return row.map(function(cell){
-				if(cell == 0) return 0;	
-				return Math.floor(((cell - min) / range) * 100);
+				var val = 0;
+				if(cell != 0) val = Math.floor(((cell - min) / range) * 100);
+				o[val] = o[val] ? o[val]+1 : 1;
+				return val;
 			});
 		});
+		console.log(o);
 
 	},
 
@@ -506,8 +511,8 @@ var Planet = Class.extend({
                   fragmentShader: [
                       "varying vec3 vNormal;",
                       "void main() {",
-                          "float intensity = pow( 0.8 - dot( vNormal, vec3( 0.0, 0.0, 0.2 ) ), 10.0 );",
-                          "gl_FragColor = vec4( 0.3, 0.1, 0.1, 0.3 ) * intensity;",
+                          "float intensity = pow( 0.8 - dot( vNormal, vec3( 0.0, 0.0, 0.2 ) ), 11.0 );",
+                          "gl_FragColor = vec4( 0.3, 0.1, 0.1, 0.1 ) * intensity;",
 
                       "}"
                   ].join("\n")
