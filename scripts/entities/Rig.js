@@ -14,6 +14,8 @@
 		init_post: function () {
 			this._super();
 			this.state.change("born");
+
+			utils.lookAwayFrom(this.mesh, this.planet.worldMesh);
 		},
 
 		tick: function () {
@@ -73,11 +75,7 @@
 		},
 
 		createMesh: function (opts) {
-			opts = opts || {};
-			this.mesh = new THREE.Mesh(
-				new THREE.SphereGeometry(opts.size || 4, 3, 3),
-				new THREE.MeshLambertMaterial({color: 0x00ffff})
-			);
+			this.mesh = window.main.models.rig.clone();
 		}
 	});
 
