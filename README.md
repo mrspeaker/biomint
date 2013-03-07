@@ -1,4 +1,4 @@
-BIOMINTO
+BIOMINT
 by Mr Speaker
 for Ludum Dare 25
 in 48 hours
