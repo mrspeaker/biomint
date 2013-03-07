@@ -166,13 +166,14 @@ var Planet = Class.extend({
 			targetXRotation = this.worldMesh.rotation.x;
 		}
 
-		if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) > 0.4 ||
-	    	Math.abs(targetXRotation - main.planet.worldMesh.rotation.x) > 0.2) {
+		var mesh = window.main.level.planet.worldMesh;
+		if(Math.abs(targetYRotation - mesh.rotation.y) > 0.4 ||
+	    	Math.abs(targetXRotation - mesh.rotation.x) > 0.2) {
 	    	this.spinning = true;
 	    } else {
 	    	this.spinning = false;
 	    	// World spins on its own
-	    	if(Math.abs(targetYRotation - main.planet.worldMesh.rotation.y) < 0.005) {
+	    	if(Math.abs(targetYRotation - mesh.rotation.y) < 0.005) {
 	    		targetYRotation = this.worldMesh.rotation.y - 0.005;
 	    	}
 	    }
@@ -357,12 +358,6 @@ var Planet = Class.extend({
 		ctx.canvas.imageSmoothingEnabled = false;
 
 		this.ctx = ctx;
-
-		$canvas.on("click", function(){
-			//main.planet.populate();
-			//main.planet.updateTexture();
-		}).appendTo("#minimap");
-
 
 		// Resourecs
 		$canvas = $("<canvas></canvas>", {

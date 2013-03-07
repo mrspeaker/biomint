@@ -33,32 +33,32 @@ var input = {
 		gfx.projector.unprojectVector(vector, gfx.camera);
 
 		var ray = new THREE.Raycaster(gfx.camera.position, vector.sub(gfx.camera.position).normalize()),
-			intersects = ray.intersectObjects([main.planet.mesh]);
+			intersects = ray.intersectObjects([window.main.level.planet.mesh]);
 
 
 		if(!intersects.length) {
 			return;
 		}
 
-		main.planet.clicked(intersects[0], true);
+		window.main.level.planet.clicked(intersects[0], true);
 	},
 	onDown: function(e){
 		this.down = true;
 
-		if(main.planet.spinning) {
+		if(window.main.level.planet.spinning) {
 			return;
 		}
 
 		var vector = new THREE.Vector3((e.clientX / gfx.WIDTH) * 2 - 1, - (e.clientY / gfx.HEIGHT) * 2 + 1, 0.5);
 		gfx.projector.unprojectVector(vector, gfx.camera);
 		var ray = new THREE.Raycaster(gfx.camera.position, vector.sub(gfx.camera.position).normalize()),
-			intersects = ray.intersectObjects([main.planet.mesh]);//worldMesh.children);
+			intersects = ray.intersectObjects([window.main.level.planet.mesh]);//worldMesh.children);
 
 		if(!intersects.length) {
 			return;
 		}
 
-		main.planet.clicked(intersects[0], false);
+		window.main.level.planet.clicked(intersects[0], false);
 		// //determine faceNr and id
 		// var faceNr = -1;
 		// var FC = intersects[0].face;

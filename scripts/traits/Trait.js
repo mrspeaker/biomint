@@ -30,7 +30,7 @@ var TraitMoving = Trait.extend({
 	
 	function syncMesh() {
 		this.mesh.position = gfx.latLongToVec3(this.pos.y, this.pos.x, this.radius, this.altitude);
-		this.mesh.lookAt(main.planet.worldMesh.position);
+		this.mesh.lookAt(window.main.level.planet.worldMesh.position);
 	}
 
 	var TraitMesh = Trait.extend({

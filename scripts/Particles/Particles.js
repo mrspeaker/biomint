@@ -6,13 +6,13 @@ var ParticleController = {
 	create: function(pos) {
 		var p = new Particles(pos, 100);
 		this.particles.push(p);
-		main.planet.worldMesh.add(p.particles);
+		window.main.level.planet.worldMesh.add(p.particles);
 	},
 	tick: function() {
 		this.particles = this.particles.filter(function(p){
 			var remove = !p.tick();
 			if(remove) {
-				main.planet.worldMesh.remove(p.particles);
+				window.main.level.planet.worldMesh.remove(p.particles);
 			}
 			return !remove;
 		});
