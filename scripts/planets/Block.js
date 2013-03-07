@@ -1,45 +1,54 @@
-var Block = Class.extend({
-	init: function(planet, mapRef, height) {
-		this.planet = planet;
-		this.mapRef = mapRef;
+(function (Class) {
 
-		this.isWater = height === 0;
+	"use strict";
 
-		// if(mapRef[1] < 10 & !this.isWater) {
-		// 	this.height = 0;
-		// 	this.isIce = true;
-		// }
+	var Block = Class.extend({
 
-		this.unearthed = false;
-		this.collected = false;
+		init: function (planet, mapRef, height) {
+			this.planet = planet;
+			this.mapRef = mapRef;
 
-		this.mineralValue = 0;
+			this.isWater = height === 0;
 
-		this.height = height;
-		this.damage = 0;
-		this.max = 10;
-	},
-	addDamage: function(amount) {
-		if(this.isWater || this.uncovered) {
-			return;
-		}
+			// if(mapRef[1] < 10 & !this.isWater) {
+			//	this.height = 0;
+			//	this.isIce = true;
+			// }
 
-		while(amount > 0) {
-			var remaining = this.max - this.damage;
-			this.damage += amount;
-			if(this.damage > 10) {
-				this.height --;
-				this.damage = 0;	
+			this.unearthed = false;
+			this.collected = false;
+
+			this.mineralValue = 0;
+
+			this.height = height;
+			this.damage = 0;
+			this.max = 10;
+		},
+		addDamage: function (amount) {
+			if (this.isWater || this.uncovered) {
+				return;
 			}
-			amount -= remaining;
+
+			while (amount > 0) {
+				var remaining = this.max - this.damage;
+				this.damage += amount;
+				if (this.damage > 10) {
+					this.height--;
+					this.damage = 0;
+				}
+				amount -= remaining;
+			}
+			if (this.height <= 0) {
+				this.unearth();
+			}
+
+		},
+		unearth: function () {
+			this.unearthed = true;
+			this.mineralValue = this.planet.resources[this.mapRef[1]][this.mapRef[0]];
 		}
-		if(this.height <= 0) {
-			this.unearth();
-		}
-		
-	},
-	unearth: function() {
-		this.unearthed = true;
-		this.mineralValue = this.planet.resources[this.mapRef[1]][this.mapRef[0]];
-	}
-});
+	});
+
+	window.Block = Block;
+
+}(Class));
