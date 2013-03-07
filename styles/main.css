@@ -105,7 +105,7 @@ body {
 
 #linky {
 	position: absolute;
-	top: 126px;
+	top: 20px;
 	left: 28px;
 	color: #304017;
 }
@@ -120,6 +120,7 @@ body {
 	width: 110px !important;
 }
 #minimap #tex {
+	display: none;
 	margin: 8px;
 	opacity: 0.8;
 	-webkit-box-shadow: 0px 0px 30px rgba(170, 0, 0, 0.75);
