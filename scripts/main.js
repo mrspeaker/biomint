@@ -19,7 +19,8 @@
 
 	models = [
 		{ name: "scout", path: "resources/scout.dae" },
-		{ name: "extractor", path: "resources/mine.dae" }
+		{ name: "extractor", path: "resources/mine.dae" },
+		{ name: "rig", path: "resources/rig.dae" }
 	];
 
 	main = {

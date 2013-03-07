@@ -6,6 +6,8 @@ var gfx = {
 		// set the scene size
 		this.WIDTH = window.innerWidth - 10;
 		this.HEIGHT = window.innerHeight - 10;
+		this.HALF_W = this.WIDTH / 2;
+		this.HALF_H = this.HEIGHT / 2;
 
 		// set some camera attributes
 		var VIEW_ANGLE = 45,
