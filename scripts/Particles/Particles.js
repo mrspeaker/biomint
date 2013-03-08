@@ -6,35 +6,52 @@
 		Particles;
 
 	ParticleController = {
+
 		particles: [],
+
 		init: function () {
 			this.particles = [];
 		},
+
 		create: function (pos) {
+
 			var p = new Particles(pos, 100);
+
 			this.particles.push(p);
 			window.main.level.planet.worldMesh.add(p.particles);
+
 		},
+
 		tick: function () {
+
 			this.particles = this.particles.filter(function (p) {
+
 				var remove = !p.tick();
+
 				if (remove) {
 					window.main.level.planet.worldMesh.remove(p.particles);
 				}
 				return !remove;
+
 			});
+
 		}
+
 	};
 
 	Particles = Class.extend({
+
 		particles: null,
 		remove: false,
+
 		init: function (pos, life) {
 			this.pos = pos;
 			this.life = life || 100;
 			this.create();
 		},
+
 		create: function () {
+
 			var colors = [],
 				geometry = new THREE.Geometry(),
 				vertex,
@@ -68,12 +85,15 @@
 			particles.sortParticles = true;
 
 			this.particles = particles;
+
 		},
 
 		tick: function () {
+
 			var i,
 				j,
 				vert;
+
 			for (i = 0, j = this.particles.geometry.vertices.length; i < j; i++) {
 				vert = this.particles.geometry.vertices[i];
 				vert.x += (Math.random() * 0.5) - 0.25;
@@ -85,6 +105,7 @@
 				this.remove = true;
 			}
 			return !this.remove;
+
 		}
 	});
 

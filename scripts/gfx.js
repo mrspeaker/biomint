@@ -9,6 +9,7 @@
 		art: {},
 
 		init: function () {
+
 			// set the scene size
 			this.WIDTH = window.innerWidth - 10;
 			this.HEIGHT = window.innerHeight - 10;
@@ -20,10 +21,11 @@
 				ASPECT = this.WIDTH / this.HEIGHT,
 				NEAR = 0.1,
 				FAR = 10000,
-				ambientLight;
+				ambientLight,
+				renderer;
 
 			// create a WebGL renderer, camera, and scene
-			this.renderer = new THREE.WebGLRenderer({clearColor: 0x181111, clearAlpha: 1});
+			renderer = this.renderer = new THREE.WebGLRenderer({clearColor: 0x181111, clearAlpha: 1});
 			this.scene = new THREE.Scene();
 			this.sceneAtmosphere = new THREE.Scene();
 			this.projector = new THREE.Projector();
@@ -45,27 +47,28 @@
 			this.addStars();
 
 			// start the renderer
-			this.renderer.setSize(this.WIDTH, this.HEIGHT);
-			this.renderer.autoClear = false;
-			this.renderer.sortObjects = false;
+			renderer.setSize(this.WIDTH, this.HEIGHT);
+			renderer.autoClear = false;
+			renderer.sortObjects = false;
 
-			this.renderer.shadowMapEnabled = true;
-			this.renderer.shadowMapSoft = true;
+			renderer.shadowMapEnabled = true;
+			renderer.shadowMapSoft = true;
 
-			this.renderer.shadowCameraNear = 3;
-			this.renderer.shadowCameraFar = this.camera.far;
-			this.renderer.shadowCameraFov = 50;
+			renderer.shadowCameraNear = 3;
+			renderer.shadowCameraFar = this.camera.far;
+			renderer.shadowCameraFov = 50;
 
-			this.renderer.shadowMapBias = 0.0039;
-			this.renderer.shadowMapDarkness = 0.5;
-			this.renderer.shadowMapWidth = 1024;
-			this.renderer.shadowMapHeight = 1024;
+			renderer.shadowMapBias = 0.0039;
+			renderer.shadowMapDarkness = 0.5;
+			renderer.shadowMapWidth = 1024;
+			renderer.shadowMapHeight = 1024;
 
 			$("#game").append(this.renderer.domElement);
 			this.addLight();
 		},
 
 		loadImages: function (images, cb) {
+
 			var toLoad = images.length,
 				self = this;
 
@@ -74,6 +77,7 @@
 				return;
 			}
 			images.forEach(function (asset) {
+
 				var image = new Image();
 
 				image.src = "resources/" + asset.path;
@@ -83,11 +87,14 @@
 					}
 				};
 				self.art[asset.name] = image;
+
 			});
+
 		},
 
 		// convert the positions from a lat, lon to a position on a sphere.
 		latLongToVec3: function (lat, lon, radius, height) {
+
 			//x = R * cos(lat) * cos(lon)
 			//y = R * cos(lat) * sin(lon)
 			//z = R *sin(lat)
@@ -103,13 +110,20 @@
 			z = (radius + height) * Math.cos(phi) * Math.sin(theta);
 
 			return new THREE.Vector3(x, y, z);
+
 		},
+
 		vec3ToLatLong: function (vec, radius, height) {
+
 			height = height || 1;
+
 			var lat = 90 - (Math.acos(vec.y / (radius + height))) * 180 / Math.PI,
 				lng = ((270 + (Math.atan2(vec.x, vec.z)) * 180 / Math.PI) % 360) - 180;
+
 			return new THREE.Vector2(lng, lat);
+
 		},
+
 		//	vec3ToLatLong2: function (vec, radius) {
 		//		var polar:Vector2;
 
@@ -126,13 +140,19 @@
 
 		//		    return polar;
 		//	},
+
 		resize: function () {},
+
 		render: function () {
+
 			this.renderer.clear();
 			this.renderer.render(this.scene, this.camera);
 			this.renderer.render(this.sceneAtmosphere, this.camera);
+
 		},
+
 		addStars: function () {
+
 			var radius = 70,
 				starsGeometry = [
 					new THREE.Geometry(),
@@ -195,9 +215,12 @@
 			}
 
 		},
+
+		// create a point light
 		addLight: function () {
-			// create a point light
+
 			var pointLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+
 			pointLight.position.x = -10;
 			pointLight.position.y = 0;
 			pointLight.position.z = 10;
@@ -207,6 +230,7 @@
 			this.scene.add(pointLight);
 
 		}
+
 	};
 
 	window.gfx = gfx;

@@ -60,18 +60,23 @@
 		},
 
 		unearthRadius: function (radius) {
+
 			var mapRef = this.planet.latLngToMap(this.pos),
 				xcell = mapRef[0],
 				ycell = mapRef[1],
 				self = this;
 
 			utils.neighbours(radius, function (x, y) {
+
 				var tile = [x + xcell, y + ycell],
 					block = self.planet.getBlockFromTile(tile);
+
 				if (block && block.isWater) {
 					block.unearth();
 				}
+
 			});
+
 		},
 
 		createMesh: function (opts) {

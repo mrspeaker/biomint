@@ -21,6 +21,7 @@
 			case "born":
 				this.state.change("center");
 				break;
+
 			case "center":
 				if (this.state.count === 100) {
 
@@ -31,6 +32,7 @@
 					this.state.change("middle");
 				}
 				break;
+
 			case "middle":
 				if (this.state.count === 100) {
 
@@ -51,11 +53,11 @@
 					var fin = Math.floor(this.haul * 9000);
 					if (fin === 0) {
 						audio.get("error").backPlay();
-						window.main.flashMessage("No minerals here! Only deploy on exposed minerals.");
+						utils.flashMessage("No minerals here! Only deploy on exposed minerals.");
 					} else {
 						audio.get("win").backPlay();
+						utils.flashMessage("Expedition haul: $" + fin);
 						window.main.addCash(fin);
-						window.main.flashMessage("Expedition haul: $" + fin);
 					}
 
 					this.state.change("dead");
@@ -72,6 +74,7 @@
 		},
 
 		checkHaulInRadius: function (radius) {
+
 			var mapRef = this.planet.latLngToMap(this.pos),
 				xcell = mapRef[0],
 				ycell = mapRef[1],
@@ -83,9 +86,11 @@
 			}, true);
 
 			return haul;
+
 		},
 
 		checkHaulAtTile: function (tile) {
+
 			var val = this.planet.getBlockFromTile(tile, true),
 				block = this.planet.getBlockFromTile(tile);
 
@@ -94,14 +99,11 @@
 				return val;
 			}
 			return 0;
+
 		},
 
 		createMesh: function (opts) {
-			opts = opts || {};
 			this.mesh = window.main.models.extractor.clone();
-			// this.mesh = new THREE.Mesh(
-			//   new THREE.SphereGeometry(opts.size || 3, 5, 5),
-			//   new THREE.MeshLambertMaterial({color: 0x0000ff }));
 		}
 	});
 

@@ -2,8 +2,11 @@
 
 	"use strict";
 
-	var audiores, models, main;
+	var audiores,
+		models,
+		main;
 
+	// TODO: group asset loading
 	audiores = [
 		{ name: "button", path: "resources/audio/button", volume: 0.8, loop: false},
 		{ name: "button2", path: "resources/audio/button2", volume: 0.8, loop: false},
@@ -24,6 +27,7 @@
 	];
 
 	main = {
+
 		level: null,
 		models: {},
 
@@ -44,6 +48,9 @@
 		},
 
 		init: function () {
+
+			// FIXME: lots of game logic in main.
+			// move to level.
 			var self = this,
 				planet;
 
@@ -52,10 +59,15 @@
 
 			// Load the collada models
 			models.forEach(function (model) {
+
 				new THREE.ColladaLoader().load(model.path, function (collada) {
+
 					self.models[model.name] = collada.scene;
+
 				});
+
 			});
+
 			audio.init(audiores);
 			ParticleController.init();
 
@@ -69,14 +81,18 @@
 
 			$("#gui")
 				.on("click", "li", function (e) {
+
 					var tool = $(this).data("tool");
 					e.stopPropagation();
 					self.level.changeTool(tool);
 					$("#gui li").removeClass("selected");
 					$(this).addClass("selected");
+
 				})
 				.on("mouseup", function (e) {
+
 					e.stopPropagation();
+
 				});
 
 			this.reset();
@@ -86,52 +102,52 @@
 				.show()
 				.delay(2500)
 				.fadeIn(1, function () {
+
 					self.zooming.go = true;
+
 				})
 				.fadeOut(2500);
 
 			// Stop clicks from propagating to the game from other screens
 			$("#gameover, #splash").on("mousedown", function (e) {
+
 				e.preventDefault();
 				e.stopPropagation();
+
 			});
 
 			this.run();
+
 		},
 
 		reset: function () {
+
 			this.bankrupt = false;
 			this.level.reset();
 			this.dollars = 0;
 			this.addCash(this.initalDollars);
 			this.setHeartbeat();
+
 		},
 
 		run: function () {
+
 			this.tick();
 			this.render();
 
 			window.requestAnimationFrame(function () {
 				main.run();
 			});
+
 		},
 
 		setHeartbeat: function () {
+
 			var time = Math.min(this.dollars, this.initalDollars) / this.initalDollars,
 				next = Math.max(1000, time * 1000 * 10);
-			this.nextHeartbeat = Date.now() + next;
-		},
 
-		flashMessage: function (msg) {
-			var stat = $("#status");
-			(function flash(count) {
-				if (count >= 0) {
-					stat.html(count % 2 === 0 ? msg : "");
-					window.setTimeout(function () {
-						flash(--count);
-					}, 400);
-				}
-			}(6));
+			this.nextHeartbeat = Date.now() + next;
+
 		},
 
 		tick: function () {
@@ -155,8 +171,11 @@
 			}
 
 			function smoothstep(a, b, v) {
+
 				var x = Math.max(0, Math.min((v - a) / (b - a), 1));
+
 				return x * x * (3 - 2 * x);
+
 			}
 
 			if (this.zooming.go) {
@@ -171,39 +190,50 @@
 				if (p >= 1) {
 					this.zooming.go = false;
 				}
+
 			}
 
 			this.level.tick();
+
 		},
 
 		addCash: function (amount) {
+
+			var self = this;
+
 			this.dollars += amount;
 
 			if (this.dollars <= 0) {
 				if (!this.bankrupt) {
-					var self = this;
-
 					// Show game over screen, then restart
 					$("#gameover")
 						.fadeIn(1500)
 						.delay(5500)
 						.fadeOut(2500, function () {
+
 							self.reset();
+
 						});
 				}
 				this.bankrupt = true;
 				return;
+
 			}
 
 			this.setCash();
+
 		},
 
 		setCash: function () {
+
 			$("#cash").text("$" + this.dollars);
+
 		},
 
 		render: function () {
+
 			gfx.render();
+
 		}
 	};
 

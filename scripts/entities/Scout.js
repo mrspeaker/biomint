@@ -26,9 +26,6 @@
 		},
 
 		createMesh: function (opts) {
-			opts = opts || {};
-			var size = opts.size || 2;
-
 			this.mesh = window.main.models.scout.clone();
 			this.mesh.children[0].material = new THREE.MeshLambertMaterial();
 		},
@@ -56,11 +53,13 @@
 		},
 
 		scan: function () {
+
 			var val = this.planet.getBlockFromPos(this.pos, true),
 				maxColor = 120, // green in HSL
 				color = ((100 - val) / 100) * maxColor;
 
 			this.mesh.children[0].material.color = new THREE.Color().setHSL(color / 360, 0.75, 0.50);
+
 		}
 
 	});

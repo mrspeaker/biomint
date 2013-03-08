@@ -1,49 +1,42 @@
-(function (gfx, utils, audio, Class, Block, ClassicalNoise) {
+(function (gfx, utils, input, audio, Class, Block, ClassicalNoise) {
 
 	"use strict";
 
 	var Planet = Class.extend({
+
 		tiles: [],
 		resources: [],
-
+		entities: [],
+		spinning: false,
 		colors: [
 			"#265b85", "#d2b394", "#c2a384", "#b2a374", "#a29364", "#928354", "#827344",
 			"#726334", "#625324", "#5b8234", "#4b7224", "#3b6214", "#2b5204"],
 
 		width: 80,
 		height: 80,
-
 		segments: 50,
 		rings: 50,
 		radius: 100,
 
-		spinning: false,
-
 		worldMesh: new THREE.Object3D(),
-
-		entities: [],
-
 		polarCapPath: [],
 
 		init: function () {
-			this.createCanvas();
-			this.makePolarCap();
-
-			this.populate();
 
 			var self = this;
+
+			this.createCanvas();
+			this.makePolarCap();
+			this.populate();
+
 			this.renderTexture(function (tex) {
 				self.worldMesh.add(self.createPlanet(tex));
-
-				// var len = self.mesh.geometry.vertices.length;
-				// for (var i = 0; i < len; i++ ) {
-				//	self.mesh.geometry.vertices[i].y += (Math.random() * 10 | 0) - 50;
-				// }
-				// self.mesh.geometry.verticesNeedUpdate = true;
 			});
+
 		},
 
 		makePolarCap: function () {
+
 			var i,
 				path = [],
 				w = this.ctx.canvas.width,
@@ -69,16 +62,16 @@
 			lingrad.addColorStop(0.5, 'rgba(255,255,255,1)');
 			lingrad.addColorStop(1, 'rgba(255,255,255,0.2)');
 			this.polarCapGradient = lingrad;
+
 		},
 
 		reset: function () {
-			this.populate();
-
-			this.updateTexture();
-
-			this.resetPlanetGeometry();
 
 			var self = this;
+
+			this.populate();
+			this.updateTexture();
+			this.resetPlanetGeometry();
 			this.entities = this.entities.filter(function (e) {
 				self.remove(e);
 				return false;
@@ -87,15 +80,20 @@
 		},
 
 		add: function (ent) {
+
 			this.entities.push(ent);
 			this.worldMesh.add(ent.mesh);
+
 		},
 
 		remove: function (ent) {
+
 			this.worldMesh.remove(ent.mesh);
+
 		},
 
 		populate: function () {
+
 			var inc = 0,
 				freq = 1 / 18,
 				resfreq = 1 / 10,
@@ -113,8 +111,7 @@
 
 				min,
 				max,
-				range,
-				o;
+				range;
 
 			this.tiles = [];
 
@@ -122,6 +119,7 @@
 				row = [];
 				resRow = [];
 				for (i = 0; i < this.width; i++) {
+					// Earth
 					val = Math.floor(Math.abs(n.noise(i * freq, j * freq, z)) * 500);
 
 					if (val < 50) {
@@ -152,7 +150,6 @@
 			min = Math.min.apply(null, nonEmptyResources);
 			max = Math.max.apply(null, nonEmptyResources);
 			range = max - min;
-			o = {};
 
 			this.resources = resources.map(function (row) {
 				return row.map(function (cell) {
@@ -160,7 +157,6 @@
 					if (cell !== 0) {
 						val = Math.floor(((cell - min) / range) * 100);
 					}
-					o[val] = o[val] ? o[val] + 1 : 1;
 					return val;
 				});
 			});
@@ -170,7 +166,7 @@
 
 			var self = this,
 				rotx,
-				mesh,
+				mesh = this.worldMesh,
 				breatheVal;
 
 			// Todo - shouldn't process display stuff in tick
@@ -178,23 +174,21 @@
 				return;
 			}
 
-			// This code wasn't even written under pressure. So embarassing.
-			rotx = (input.targetXRotation - this.worldMesh.rotation.x) * 0.01;
+			rotx = (input.targetXRotation - mesh.rotation.x) * 0.01;
 			if (Math.abs(rotx) < 0.001) {
 				rotx = 0;
 				input.targetXRotation = 0;
 			}
-			this.worldMesh.rotation.x += rotx;
-			this.worldMesh.rotation.y += (input.targetYRotation - this.worldMesh.rotation.y) * 0.03;
+			mesh.rotation.x += rotx;
+			mesh.rotation.y += (input.targetYRotation - mesh.rotation.y) * 0.03;
 
 			input.targetXRotation *= 0.95;
-			if (Math.abs(input.targetXRotation - this.worldMesh.rotation.x) > 0.001) {
+			if (Math.abs(input.targetXRotation - mesh.rotation.x) > 0.001) {
 				input.targetXRotation *= 0.9;
 			} else {
-				input.targetXRotation = this.worldMesh.rotation.x;
+				input.targetXRotation = mesh.rotation.x;
 			}
 
-			mesh = window.main.level.planet.worldMesh;
 			if (Math.abs(input.targetYRotation - mesh.rotation.y) > 0.4 ||
 					Math.abs(input.targetXRotation - mesh.rotation.x) > 0.2) {
 				this.spinning = true;
@@ -222,13 +216,14 @@
 			// Make the planet breathe a little
 			breatheVal = 0.02 * Math.abs(Math.sin(Date.now() / 4000));
 			breatheVal = 0.98 + breatheVal;
-			this.worldMesh.scale.x = breatheVal;
-			this.worldMesh.scale.y = breatheVal;
-			this.worldMesh.scale.z = breatheVal;
+			mesh.scale.x = breatheVal;
+			mesh.scale.y = breatheVal;
+			mesh.scale.z = breatheVal;
 
 		},
 
 		checkMapBounds: function (tile, useResourcesNotPlanet) {
+
 			var map = useResourcesNotPlanet ? this.resources : this.tiles;
 
 			if (tile[1] < 0 || tile[1] > map.length - 1 ||
@@ -236,13 +231,19 @@
 				return false;
 			}
 			return true;
+
 		},
 
 		getBlockFromPos: function (pos, useResourcesNotPlanet) {
+
 			var tilePos = this.latLngToMap(pos);
+
 			return this.getBlockFromTile(tilePos, useResourcesNotPlanet);
+
 		},
+
 		getBlockFromTile: function (tile, useResourcesNotPlanet) {
+
 			var map = useResourcesNotPlanet ? this.resources : this.tiles;
 
 			if (tile[0] < 0) { tile[0] = this.width + tile[0]; }
@@ -254,10 +255,12 @@
 		},
 
 		latLngToMap: function (pos) {
+
 			var xcell = ((pos.x + 180) / 360) * this.width | 0,
 				ycell = ((180 - (pos.y + 90)) / 180) * this.height | 0;
 
 			return [xcell, ycell];
+
 		},
 
 		// mapToLatLng: function (xcell, ycell) {
@@ -271,22 +274,26 @@
 		// },
 
 		sinkEarth: function (geo) {
+
 			var ring = Math.floor((geo.faceIndex / this.rings) * (this.width / this.rings)),
 				segment = Math.floor((geo.faceIndex % this.segments) * (this.width / this.segments)),
 				am = 1 - (Math.random() * 0.02);
+
 			if (segment === 0 || segment === this.width) {
 				// Edge piece - don't sink
 				return;
 			}
-			//this.mesh.geometry.vertices[geo.face.a].multiplyScalar(am);
+
+			// Push down a couple of the verticies
 			this.mesh.geometry.vertices[geo.face.b].multiplyScalar(am);
 			this.mesh.geometry.vertices[geo.face.c].multiplyScalar(am);
-			//this.mesh.geometry.vertices[geo.face.d].multiplyScalar(am);
 
 			this.mesh.geometry.verticesNeedUpdate = true;
+
 		},
 
 		clicked: function (geo, selected) {
+
 			var inv,
 				rotatedPoint,
 				pos,
@@ -294,6 +301,7 @@
 				ypos,
 				xcell,
 				ycell;
+
 			// WWWWW TTTTTT FFFFF?!
 			// I AM A GODDDDD!
 			inv = new THREE.Matrix4().getInverse(geo.object.matrixRotationWorld.clone().rotateY(Math.PI));
@@ -322,6 +330,7 @@
 		},
 
 		explode: function (pos, geo) {
+
 			var self = this,
 				mapRef = this.latLngToMap(pos),
 				xcell = mapRef[0],
@@ -333,9 +342,12 @@
 			this.sinkEarth(geo);
 
 			utils.neighbours(2, function (x, y) {
+
 				var damage = 0,
 					block,
 					wasUnearthed;
+
+				// FIXME: move magic gameplay numbers to a global settings
 				if (x === 0 && y === 0) {
 					damage = 30;
 				} else if (Math.abs(x) < 2 && Math.abs(y) < 2) {
@@ -366,21 +378,28 @@
 			}
 
 			this.updateTexture();
+
 		},
 
 		badDigging: function () {
+
 			var digCost = 10000;
+
 			window.main.addCash(-digCost);
 			audio.get("error").backPlay();
-			window.main.flashMessage("Exploratory drilling failed: share price drops.  <span class='cost'>-$" + digCost + "</span>");
+			utils.flashMessage("Exploratory drilling failed: share price drops.  <span class='cost'>-$" + digCost + "</span>");
+
 		},
 
 		collectBlock: function (block) {
+
 			block.collected = true;
 			this.updateTexture();
+
 		},
 
 		createCanvas: function () {
+
 			var $canvas = $("<canvas></canvas>", {
 					id: "tex"
 				}).appendTo("#minimap"),
@@ -388,31 +407,33 @@
 
 			ctx.canvas.width = this.width * 5;
 			ctx.canvas.height = this.height * 5;
-
 			ctx.canvas.webkitImageSmoothingEnabled = false;
 			ctx.canvas.imageSmoothingEnabled = false;
 
 			this.ctx = ctx;
 
-			// Resourecs
+			// Resources
 			$canvas = $("<canvas></canvas>", {
 				id: "resources"
 			}).appendTo("#minimap");
 			ctx = $canvas[0].getContext("2d");
-
 			ctx.canvas.width = this.width * 5;
 			ctx.canvas.height = this.height * 5;
 
 		},
 
 		updateTexture: function () {
+
 			var self = this;
+
 			this.renderTexture(function (tex) {
 				self.mesh.material.map = tex;
 			});
+
 		},
 
 		renderTexture: function (cb) {
+
 			var self = this,
 				c = this.ctx,
 				w = c.canvas.width / this.width | 0,
@@ -450,6 +471,7 @@
 			}
 
 			function drawPolarCap() {
+
 				var i,
 					j,
 					p = self.polarCapPath[0];
@@ -463,6 +485,7 @@
 				c.fillStyle = self.polarCapGradient;
 				c.fill();
 				c.closePath();
+
 			}
 
 			drawPolarCap();
@@ -502,6 +525,7 @@
 		},
 
 		resetPlanetGeometry: function () {
+
 			var i,
 				sphere;
 
@@ -518,9 +542,11 @@
 				this.mesh.geometry.vertices[i] = sphere.vertices[i].clone();
 			}
 			this.mesh.geometry.verticesNeedUpdate = true;
+
 		},
 
 		createPlanet: function (texture) {
+
 			var sphereMaterial = new THREE.MeshLambertMaterial({
 					color: 0xd4be92,
 					map: texture
@@ -579,9 +605,11 @@
 			this.mesh = sphere;
 
 			return sphere;
+
 		}
+
 	});
 
 	window.Planet = Planet;
 
-}(gfx, utils, audio, Class, Block, ClassicalNoise));
+}(gfx, utils, input, audio, Class, Block, ClassicalNoise));
