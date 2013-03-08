@@ -72,7 +72,6 @@
 		},
 
 		reset: function () {
-
 			this.populate();
 
 			this.updateTexture();
@@ -165,7 +164,6 @@
 					return val;
 				});
 			});
-			console.log(o);
 		},
 
 		tick: function () {
@@ -385,7 +383,7 @@
 		createCanvas: function () {
 			var $canvas = $("<canvas></canvas>", {
 					id: "tex"
-				}),
+				}).appendTo("#minimap"),
 				ctx = $canvas[0].getContext("2d");
 
 			ctx.canvas.width = this.width * 5;
@@ -399,13 +397,11 @@
 			// Resourecs
 			$canvas = $("<canvas></canvas>", {
 				id: "resources"
-			});
+			}).appendTo("#minimap");
 			ctx = $canvas[0].getContext("2d");
 
 			ctx.canvas.width = this.width * 5;
 			ctx.canvas.height = this.height * 5;
-
-			$canvas.appendTo("#minimap");
 
 		},
 

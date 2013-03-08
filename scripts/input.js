@@ -1,4 +1,5 @@
 (function (gfx) {
+
 	"use strict";
 
 	var mouseX = 0, mouseY = 0,
