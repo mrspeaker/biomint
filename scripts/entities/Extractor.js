@@ -3,21 +3,31 @@
 	"use strict";
 
 	var Extractor = Entity.extend({
-		init: function (planet, pos) {
+
+		init: function (planet, pos, geo) {
+
 			this._super(planet, pos);
 			this.planet = planet;
+			this.geo = geo;
+			this.altitude = -0.5;
 			this.has([TraitMesh, TraitState]);
+
 		},
+
 		init_post: function () {
+
 			this._super();
 			this.state.change("born");
-			this.altitude = 0;
 			this.haul = 0;
 
 			utils.lookAwayFrom(this.mesh, this.planet.worldMesh);
+
 		},
+
 		tick: function () {
+
 			switch (this.state.current) {
+
 			case "born":
 				this.state.change("center");
 				break;
@@ -61,16 +71,21 @@
 					}
 
 					this.state.change("dead");
+
 				}
 				break;
 
 			case "dead":
 				if (this.state.count === 0) {
+
 					this.remove = true;
+
 				}
 				break;
 			}
+
 			this._super();
+
 		},
 
 		checkHaulInRadius: function (radius) {
@@ -82,7 +97,9 @@
 				self = this;
 
 			utils.neighbours(radius, function (x, y) {
+
 				haul += self.checkHaulAtTile([x + xcell, y + ycell]);
+
 			}, true);
 
 			return haul;
@@ -103,8 +120,11 @@
 		},
 
 		createMesh: function (opts) {
+
 			this.mesh = window.main.models.extractor.clone();
+
 		}
+
 	});
 
 	window.Extractor = Extractor;

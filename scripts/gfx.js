@@ -97,8 +97,8 @@
 
 			//x = R * cos(lat) * cos(lon)
 			//y = R * cos(lat) * sin(lon)
-			//z = R *sin(lat)
-			var phi =  lat * (Math.PI / 180),
+			//z = R * sin(lat)
+			var phi = lat * (Math.PI / 180),
 				theta = (lon - 180) * (Math.PI / 180),
 				x,
 				y,
@@ -219,13 +219,14 @@
 		// create a point light
 		addLight: function () {
 
-			var pointLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+			var pointLight;
 
+			pointLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
 			pointLight.position.x = -10;
 			pointLight.position.y = 0;
 			pointLight.position.z = 10;
-
 			pointLight.castShadow = true;
+
 			// add to the scene
 			this.scene.add(pointLight);
 

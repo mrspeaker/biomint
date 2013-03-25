@@ -5,10 +5,12 @@
 	var Explosive = Entity.extend({
 
 		init: function (planet, pos, geo) {
+
 			this._super(planet, pos);
-			this.geo = geo;
 			this.planet = planet;
+			this.geo = geo;
 			this.has([TraitMesh, TraitState]);
+
 		},
 
 		init_post: function () {

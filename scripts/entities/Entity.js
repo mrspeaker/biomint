@@ -3,10 +3,10 @@
 	"use strict";
 
 	var Entity = Class.extend({
+
 		pos: null,
 		altitude: 2.5,
 		behaviours: null,
-
 		remove: false,
 
 		has: function (traits) {
@@ -20,6 +20,7 @@
 		},
 
 		init: function (planet, pos, color) {
+
 			this.radius = planet.radius;
 			this.color = color || Math.random() * 0xffffff;
 

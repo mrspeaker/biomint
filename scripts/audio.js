@@ -54,7 +54,9 @@
 					this.pause();
 					this.currentTime = 0;
 				};
+
 				self.snd[asset.name] = audio;
+
 			});
 
 		},

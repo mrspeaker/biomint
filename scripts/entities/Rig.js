@@ -5,20 +5,26 @@
 	var Rig = Entity.extend({
 
 		init: function (planet, pos, geo) {
-			this.geo = geo;
+
 			this._super(planet, pos);
 			this.planet = planet;
+			this.geo = geo;
+			this.altitude = -0.2;
 			this.has([TraitMesh, TraitState]);
+
 		},
 
 		init_post: function () {
+
 			this._super();
 			this.state.change("born");
 
 			utils.lookAwayFrom(this.mesh, this.planet.worldMesh);
+
 		},
 
 		tick: function () {
+
 			switch (this.state.current) {
 			case "born":
 				this.state.change("center");
@@ -57,6 +63,7 @@
 				break;
 			}
 			this._super();
+
 		},
 
 		unearthRadius: function (radius) {
@@ -80,8 +87,11 @@
 		},
 
 		createMesh: function (opts) {
+
 			this.mesh = window.main.models.rig.clone();
+
 		}
+
 	});
 
 	window.Rig = Rig;
